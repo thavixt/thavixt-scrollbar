@@ -1,0 +1,42 @@
+{
+  "name": "thavixt-scrollbar-core",
+  "version": "1.0.0",
+  "description": "A simple package to replace scrollbars with a custom one on your websites",
+  "license": "MIT",
+  "author": {
+    "name": "Péter Komlósi",
+    "email": "komlosi.peti@gmail.com",
+    "url": "https://github.com/thavixt"
+  },
+  "keywords": [
+    "scrollbar"
+  ],
+  "main": "./src/index.ts",
+  "files": [
+    "src/**/*"
+  ],
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "clean": "rm -rf ./lib/",
+    "lint": "eslint ./src/ --fix",
+    "semantic-release": "semantic-release",
+    "test:watch": "jest --watch",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "8.24.0",
+    "@typescript-eslint/parser": "8.24.0",
+    "eslint": "9.20.1",
+    "eslint-plugin-node": "11.1.0",
+    "jsdom": "^26.0.0",
+    "prettier": "3.5.0",
+    "semantic-release": "24.2.2",
+    "ts-node": "10.9.2",
+    "typescript": "5.7.3",
+    "vitest": "^3.0.5"
+  }
+}
