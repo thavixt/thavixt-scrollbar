@@ -1,2 +1,7 @@
+*/.env
+
+*/release.sh
+release_all.sh
+*/release_output.txt
+
 test-*-app
-*/pack
