@@ -11,9 +11,9 @@
   "keywords": [
     "scrollbar"
   ],
-  "main": "./src/index.ts",
+  "main": "./lib/index.js",
   "files": [
-    "src/**/*"
+    "lib/**/*"
   ],
   "engines": {
     "node": "22"

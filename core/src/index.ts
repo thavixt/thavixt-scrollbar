@@ -1,5 +1,3 @@
-import { filterTruthyValues } from "./utils";
-
 type ScrollDirection = 'top' | 'bottom' | 'left' | 'right';
 
 type ScrollbarScrollDetails = Record<ScrollDirection, number>;
@@ -36,50 +34,51 @@ const DEFAULT_COLOR_THUMB_DARK = 'gray';
 const DEFAULT_COLOR_THUMB_HOVER_LIGHT = 'darkgray';
 const DEFAULT_COLOR_THUMB_HOVER_DARK = 'darkgray';
 
-const createScrollbarStyles = (styles: Partial<ThavixtScrollbarStyles> = {}): string => {
+const createScrollbarStyles = (id: string, styles: Partial<ThavixtScrollbarStyles> = {}): string => {
   return `/* Variables */
-:root {
+div[data-tsb-id="${id}"] {
   --tsb_width: ${styles.width ?? DEFAULT_SIZE}px;
   --tsb_height: ${styles.height ?? DEFAULT_SIZE}px;
   --tsb_trackColor: ${styles.trackColor ?? DEFAULT_COLOR_TRACK};
 }
 @media (prefers-color-scheme: light) {
-  :root {
+  div[data-tsb-id="${id}"] {
   --tsb_thumbColor: ${styles.thumbColor ?? DEFAULT_COLOR_THUMB_LIGHT};
   --tsb_thumbHoverColor: ${styles.thumbHoverColor ?? DEFAULT_COLOR_THUMB_HOVER_LIGHT};
   }
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  div[data-tsb-id="${id}"] {
   --tsb_thumbColor: ${styles.thumbColor ?? DEFAULT_COLOR_THUMB_DARK};
   --tsb_thumbHoverColor: ${styles.thumbHoverColor ?? DEFAULT_COLOR_THUMB_HOVER_DARK};
   }
 }
 /* Width */
-::-webkit-scrollbar {
+div[data-tsb-id="${id}"]::-webkit-scrollbar {
   width: var(--tsb_width);
   height: var(--tsb_height);
 }
 /* Track */
-::-webkit-scrollbar-track {
+div[data-tsb-id="${id}"]::-webkit-scrollbar-track {
   background: var(--tsb_trackColor);
   }
 /* Handle */
-::-webkit-scrollbar-thumb {
+div[data-tsb-id="${id}"]::-webkit-scrollbar-thumb {
   background: var(--tsb_thumbColor);
   border-radius: 6px;
 }
 /* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
+div[data-tsb-id="${id}"]::-webkit-scrollbar-thumb:hover {
   background: var(--tsb_thumbHoverColor);
 }
 /* Hide corner box */
-::-webkit-scrollbar-corner {
+div[data-tsb-id="${id}"]::-webkit-scrollbar-corner {
   background: var(--tsb_trackColor);
 }`;
 }
 
 export class ThavixtScrollbar {
+  private id = crypto.randomUUID().slice(0, 8);
   private scrollTop = 0;
   private scrollLeft = 0;
   private prevScrollDetails: null | Partial<ScrollbarScrollDetails> = null;
@@ -88,13 +87,21 @@ export class ThavixtScrollbar {
   constructor(public container: HTMLDivElement, public options: Partial<ThavixtScrollbarOptions> = {}) {
     // console.log('ThavixtScorllbar created with options:', this.options, ' in container ', this.container);
     this.addStyleSheet();
+    this.addScrollIndicatorElement();
     this.addEventListeners();
     container.style.overflow = 'auto';
+    container.dataset["tsbId"] = this.id;
   }
 
   destroy = () => {
     this.removeStyleSheet();
     this.removeEventListeners();
+  }
+
+  private addScrollIndicatorElement = () => {
+    const div = document.createElement('div');
+    div.id = 'tsb-scrollIndicator';
+    this.container.appendChild(div);
   }
 
   private addStyleSheet = () => {
@@ -104,8 +111,8 @@ export class ThavixtScrollbar {
     }
     const css = document.createElement('style');
     css.id = CSS_STYLESHEET_ELEMENT_ID;
-    css.appendChild(document.createTextNode(createScrollbarStyles(this.options.styles)));
-    document.getElementsByTagName("head")[0].appendChild(css);
+    css.appendChild(document.createTextNode(createScrollbarStyles(this.id, this.options.styles)));
+    this.container.appendChild(css);
     // console.log('CSS injected');
   }
 
@@ -170,4 +177,16 @@ export class ThavixtScrollbar {
       this.prevScrollDetails = scrollValues;
     }
   }
+}
+
+function filterTruthyValues<T extends Record<string, unknown>>(obj: T): Partial<T> {
+  return Object.keys(obj).reduce((acc, key) => {
+    if (!!obj[key]) {
+      return {
+        ...acc,
+        [key]: obj[key],
+      }
+    }
+    return acc;
+  }, {} as Partial<T>);
 }

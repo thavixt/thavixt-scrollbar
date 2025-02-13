@@ -1,0 +1,19 @@
+{
+  "name": "thavixt-scrollbar",
+  "version": "1.0.0",
+  "description": "TODO",
+  "main": "index.js",
+  "scripts": {
+    "release": "./release.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thavixt/thavixt-scrollbar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thavixt/thavixt-scrollbar/issues"
+  },
+  "homepage": "https://github.com/thavixt/thavixt-scrollbar#readme"
+}
