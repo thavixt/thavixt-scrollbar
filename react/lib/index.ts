@@ -19,6 +19,7 @@ export function useScrollbar(
         scrollbarRef.current = null;
       }
     }
+    // the `options` dep should be stable?
   }, [options, ref])
 }
 
