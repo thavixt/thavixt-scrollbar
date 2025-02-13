@@ -1,6 +1,6 @@
 {
   "name": "thavixt-scrollbar-core",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A simple package to replace scrollbars with a custom one on your websites",
   "license": "MIT",
   "author": {
@@ -21,7 +21,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "lint": "eslint ./src/ --fix",
-    "release": "semantic-release",
+    "release": "semantic-release --no-ci",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
