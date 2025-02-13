@@ -11,7 +11,7 @@
   "keywords": [
     "scrollbar"
   ],
-  "main": "./src/index.ts",
+  "main": "./lib/index.ts",
   "files": [
     "src/**/*"
   ],

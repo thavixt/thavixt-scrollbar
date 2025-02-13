@@ -28,13 +28,14 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@jedmao/semantic-release-npm-github-config": "^1.0.9",
     "@typescript-eslint/eslint-plugin": "8.24.0",
     "@typescript-eslint/parser": "8.24.0",
     "eslint": "9.20.1",
     "eslint-plugin-node": "11.1.0",
     "jsdom": "^26.0.0",
     "prettier": "3.5.0",
-    "semantic-release": "24.2.2",
+    "semantic-release": "^24.2.2",
     "ts-node": "10.9.2",
     "typescript": "5.7.3",
     "vitest": "^3.0.5"
