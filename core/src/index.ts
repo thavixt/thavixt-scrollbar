@@ -3,14 +3,14 @@ type ScrollDirection = 'top' | 'bottom' | 'left' | 'right';
 type ScrollbarScrollDetails = Record<ScrollDirection, number>;
 type ScrollbarThresholdsReached = Partial<Record<ScrollDirection, boolean>>;
 
-export interface ThavixtScrollbarOptions {
+export type ThavixtScrollbarOptions = Partial<{
   // Callback on scroll
   onScroll?: (details: ScrollbarScrollDetails) => void;
   // Callback when the element is scrolled to it's min/max width/height
   onScrollToEnd?: (thresholds: ScrollbarThresholdsReached) => void;
   // Styles to apply to the element's vertical/horizontal scrollbar
   styles?: Partial<ThavixtScrollbarStyles>;
-}
+}>
 
 export interface ThavixtScrollbarStyles {
   // Size in pixels
@@ -29,10 +29,10 @@ const CSS_STYLESHEET_ELEMENT_ID = 'thavixt_scrollbar_styles';
 
 const DEFAULT_SIZE = 8;
 const DEFAULT_COLOR_TRACK = 'transparent';
-const DEFAULT_COLOR_THUMB_LIGHT = 'gray';
+const DEFAULT_COLOR_THUMB_LIGHT = 'black';
 const DEFAULT_COLOR_THUMB_DARK = 'gray';
 const DEFAULT_COLOR_THUMB_HOVER_LIGHT = 'darkgray';
-const DEFAULT_COLOR_THUMB_HOVER_DARK = 'darkgray';
+const DEFAULT_COLOR_THUMB_HOVER_DARK = 'white';
 
 const createScrollbarStyles = (id: string, styles: Partial<ThavixtScrollbarStyles> = {}): string => {
   return `/* Variables */
@@ -78,19 +78,19 @@ div[data-tsb-id="${id}"]::-webkit-scrollbar-corner {
 }
 
 export class ThavixtScrollbar {
-  private id = crypto.randomUUID().slice(0, 8);
+  private animationElementId = crypto.randomUUID().slice(0, 8);
   private scrollTop = 0;
   private scrollLeft = 0;
   private prevScrollDetails: null | Partial<ScrollbarScrollDetails> = null;
   private prevThresholdsReached: null | Partial<ScrollbarThresholdsReached> = null;
 
-  constructor(public container: HTMLDivElement, public options: Partial<ThavixtScrollbarOptions> = {}) {
+  constructor(public container: HTMLDivElement, public options: ThavixtScrollbarOptions = {}) {
     // console.log('ThavixtScorllbar created with options:', this.options, ' in container ', this.container);
     this.addStyleSheet();
     this.addScrollIndicatorElement();
     this.addEventListeners();
     container.style.overflow = 'auto';
-    container.dataset["tsbId"] = this.id;
+    container.dataset["tsbId"] = this.animationElementId;
   }
 
   destroy = () => {
@@ -111,7 +111,7 @@ export class ThavixtScrollbar {
     }
     const css = document.createElement('style');
     css.id = CSS_STYLESHEET_ELEMENT_ID;
-    css.appendChild(document.createTextNode(createScrollbarStyles(this.id, this.options.styles)));
+    css.appendChild(document.createTextNode(createScrollbarStyles(this.animationElementId, this.options.styles)));
     this.container.appendChild(css);
     // console.log('CSS injected');
   }

@@ -13,32 +13,48 @@ npm install thavixt-scrollbar
 ## Usage
 
 ```ts
-import { myPackage } from 'thavixt-scrollbar';
+// class ThavixtScrollbar {
+//   container: HTMLDivElement;
+//   options: Partial<ThavixtScrollbarOptions>;
+//
+//   constructor(container: HTMLDivElement, options?: Partial<ThavixtScrollbarOptions>);
+//   destroy: () => void;
+// }
 
-myPackage('hello');
-//=> 'hello from my package'
+// Example usage:
+import { ThavixtScrollbar } from 'thavixt-scrollbar';
+
+new ThavixtScrollbar('id_of_scrollable_html_element', {thumbColor: 'pink'})
 ```
 
 ## API
 
-### myPackage(input, options?)
+### ThavixtScrollbar(container, options?)
 
-#### input
+#### container
 
 Type: `string`
 
-Lorem ipsum.
+id of the HTML element to use
 
 #### options
 
 Type: `object`
 
-##### postfix
-
-Type: `string`
-Default: `rainbows`
-
-Lorem ipsum.
+```ts
+export interface ThavixtScrollbarStyles {
+  // Size in pixels
+  width: number;
+  // Size in pixels
+  height: number;
+  // CSS color
+  trackColor: string;
+  // CSS color
+  thumbColor: string;
+  // CSS color
+  thumbHoverColor: string;
+}
+```
 
 ## Attributions
 
