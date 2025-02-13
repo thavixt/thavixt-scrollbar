@@ -1,5 +1,6 @@
 .env
 release.sh
+release_output.txt
 
 # Logs
 logs
