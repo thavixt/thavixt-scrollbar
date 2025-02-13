@@ -1,4 +1,4 @@
-# thavixt-scrollbar
+# thavixt-scrollbar-core
 
 [![npm package][npm-img]][npm-url]
 
