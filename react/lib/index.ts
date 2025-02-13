@@ -30,3 +30,5 @@ export {
 export type {
   ThavixtScrollbarOptions as ScrollbarOptions,
 }
+
+export default useScrollbar
