@@ -1,7 +1,8 @@
 # thavixt-scrollbar
 
-[![npm package][npm-img-core]][npm-url]
-[![npm package][npm-img-react]][npm-url]
+thavixt-scrollbarcore: ![npm package][npm-img-core]
+
+thavixt-scrollbarreact: ![npm package][npm-img-react]
 
 ## Attributions
 
