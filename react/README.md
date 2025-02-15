@@ -4,6 +4,10 @@
 
 A basic Javascript package to customize scrollbars of containers in your website.
 
+# Demo
+
+[demo page](https://demo-thavixt-scrollbar-react-oen1yr2bx-thavixts-projects.vercel.app/)
+
 ## Install
 
 ```bash
