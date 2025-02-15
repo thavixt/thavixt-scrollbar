@@ -25,11 +25,19 @@ for i in "$@"; do
 done
 
 PREV_VERSION=$(node -p "require('./core/package.json').version")
+VERSION_FILE="./.version"
+current_dt="`date +%Y%m%d%H%M%S`";
+latest_commit="`git rev-parse --short HEAD`";
+latest_commit_short="`git rev-parse HEAD`";
 
 printf "\n"
 echo "Previous version:   ${PREV_VERSION}"
 echo "Next version:       ${VERSION}"
+echo "Commit:             ${latest_commit_short}"
 echo "Release type:       ${TYPE}"
+
+printf "version:\tv$VERSION\ncommit:\t\t$latest_commit\ndate:\t\t\t$current_dt" > $VERSION_FILE
+exit
 
 # do the release pipeline
 
@@ -55,6 +63,10 @@ fi
 printf "$prefix Create release of v$VERSION"
 ./core/release.sh $VERSION
 ./react/release.sh $VERSION
+
+# write out info about the newly created version
+$VERSION_FILE=".version"
+echo $VERSION > $VERSION_FILE
 
 printf "$prefix Create release commit and tag for v$VERSION"
 printf "\n"
