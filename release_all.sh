@@ -24,10 +24,10 @@ for i in "$@"; do
   esac
 done
 
-current_version=$(node -p "require('./core/package.json').version")
+PREV_VERSION=$(node -p "require('./core/package.json').version")
 
 printf "\n"
-echo "Previous version:   ${VERSION}"
+echo "Previous version:   ${PREV_VERSION}"
 echo "Next version:       ${VERSION}"
 echo "Release type:       ${TYPE}"
 
@@ -40,19 +40,20 @@ if [[ $VERSION = "default" ]] ; then
     exit 0
 fi
 
-printf "$prefix Next version v$VERSION (previous: v$current_version)"
+printf "$prefix Next version v$VERSION (previous: v$PREV_VERSION)"
 next_ref="v$VERSION"
 
-  printf "$prefix Perform $TYPE checks for v$VERSION"
+printf "$prefix Perform $TYPE checks for v$VERSION"
+
+# ./core/release.sh $VERSION --pre
+./react/release.sh $VERSION --pre
 if [[ $TYPE = "pre-release" ]]; then
-    ./core/release.sh $VERSION --pre
-    ./react/release.sh $VERSION --pre
-    printf "\nPre-release checks finished.\nPerform an actual release with the -r=<anything> flag"
-    exit 0
+  printf "\nPre-release checks finished.\nPerform an actual release with the -r=<anything> flag"
+  exit
 fi
 
 printf "$prefix Create release of v$VERSION"
-./core/release.sh $VERSION
+# ./core/release.sh $VERSION
 ./react/release.sh $VERSION
 
 printf "$prefix Create release commit and tag for v$VERSION"
@@ -60,7 +61,7 @@ printf "\n"
 git add --all
 git commit --allow-empty -am "Version $VERSION"
 git tag $next_ref
-git push origin master
+git push origin main
 git push origin $next_ref
 
-printf "$prefix Release finished of $VERSION"
+printf "$prefix Release finished of $VERSION (previous: $PREV_VERSION)"

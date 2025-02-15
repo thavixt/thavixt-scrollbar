@@ -15,7 +15,8 @@ version=$1
 printf "$prefix Pre-release of thavixt-scrollbar-$module v$version"
 
 printf "$prefix Check dependencies"
-npm i 
+rm -rf package-lock.json
+npm i
 npm i thavixt-scrollbar-core@latest
 
 printf "$prefix Run type checks"
@@ -28,6 +29,7 @@ npm run build
 # npm run lint
 if [[ "$*" == *"--pre"* ]]
 then
+    cd ..
     exit 0
 else
     printf "$prefix Release thavixt-scrollbar-$module v$version\n"

@@ -27,6 +27,7 @@ npm run build
 # npm run lint
 if [[ "$*" == *"--pre"* ]]
 then
+    cd ..
     exit 0
 else
     printf "$prefix Release thavixt-scrollbar-$module v$version\n"

@@ -1,7 +1,21 @@
 {
   "name": "thavixt-scrollbar",
   "version": "1.0.0",
-  "description": "TODO",
+  "description": "Replace the scrollbars of a container",
+  "license": "MIT",
+  "author": {
+    "name": "Péter Komlósi",
+    "email": "komlosi.peti@gmail.com",
+    "url": "https://github.com/thavixt"
+  },
+  "keywords": [
+    "scrollbar",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thavixt/thavixt-scrollbar.git"
+  },
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -9,12 +23,6 @@
     "pre-release": "sh ./release_all.sh --pre",
     "release": "sh ./release_all.sh"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/thavixt/thavixt-scrollbar.git"
-  },
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/thavixt/thavixt-scrollbar/issues"
   },
