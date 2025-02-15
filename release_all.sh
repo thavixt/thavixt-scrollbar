@@ -30,21 +30,17 @@ current_dt="`date +%Y%m%d%H%M%S`";
 latest_commit="`git rev-parse --short HEAD`";
 latest_commit_short="`git rev-parse HEAD`";
 
-printf "\n"
+# print details
 echo "Previous version:   ${PREV_VERSION}"
 echo "Next version:       ${VERSION}"
 echo "Commit:             ${latest_commit_short}"
 echo "Release type:       ${TYPE}"
-
-printf "version:\tv$VERSION\ncommit:\t\t$latest_commit\ndate:\t\t\t$current_dt" > $VERSION_FILE
-exit
-
 # do the release pipeline
 
 prefix="\n-> "
 
 if [[ $VERSION = "default" ]] ; then
-    echo 'Specify the next version number in argument, ex: -v=1.2.3'
+    printf '\nError: Specify the next version number in argument, ex: -v=1.2.3'
     exit 0
 fi
 
@@ -65,8 +61,10 @@ printf "$prefix Create release of v$VERSION"
 ./react/release.sh $VERSION
 
 # write out info about the newly created version
-$VERSION_FILE=".version"
-echo $VERSION > $VERSION_FILE
+printf "version:\tv$VERSION\ncommit:\t\t$latest_commit\ndate:\t\t\t$current_dt" > $VERSION_FILE
+
+printf "$prefix Release of v$VERSION is ready, deployed"
+sleep 1
 
 printf "$prefix Create release commit and tag for v$VERSION"
 printf "\n"
