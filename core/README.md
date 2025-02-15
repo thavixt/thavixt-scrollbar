@@ -79,4 +79,4 @@ type ScrollbarThresholdsReached = Partial<Record<ScrollDirection, boolean>>;
 
 ## Attributions
 
-[npm-img]:https://img.shields.io/npm/v/thavixt-scrollbar
+[npm-img]:https://img.shields.io/npm/v/thavixt-scrollbar-core

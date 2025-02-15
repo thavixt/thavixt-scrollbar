@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 
 export function useScrollbar<T extends HTMLElement>(options: ThavixtScrollbarOptions) {
   const ref = useRef<T>(null)
-  const scrollbarRef = useRef<ThavixtScrollbar | null>(null);
+  const scrollbarRef = useRef<ThavixtScrollbar<T> | null>(null);
 
   useEffect(() => {
     if (!ref.current) {

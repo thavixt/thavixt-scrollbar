@@ -7,8 +7,8 @@ node_modules
 */.env
 
 # release scripts
-*/release.sh
-release_all.sh
+# */release.sh
+# release_all.sh
 release_output.txt
 */release_output.txt
 
