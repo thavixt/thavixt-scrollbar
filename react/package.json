@@ -1,6 +1,6 @@
 {
   "name": "thavixt-scrollbar-react",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "A simple package to replace scrollbars with a custom one on your websites",
   "license": "MIT",
   "author": {
@@ -36,7 +36,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "thavixt-scrollbar-core": "^1.2.2"
+    "thavixt-scrollbar-core": "^1.2.3"
   },
   "peerDependencies": {
     "react": "^19.0.0",
