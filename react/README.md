@@ -1,8 +1,8 @@
 # thavixt-scrollbar-core
 
-[![npm package][npm-img]][npm-url]
+![npm package][npm-img]
 
-> A basic Javascript package to customize scrollbars of countainers in your website.
+A basic Javascript package to customize scrollbars of containers in your website.
 
 ## Install
 
@@ -10,13 +10,13 @@
 npm install thavixt-scrollbar-react
 ```
 
-## Usage
-
-### Interface
+## Interface
 
 ```ts
 function useScrollbar<T extends HTMLElement>(options: ThavixtScrollbarOptions): void;
 ```
+
+## Usage
 
 ```ts
 // Example usage:

@@ -19,6 +19,8 @@ export function useScrollbar<T extends HTMLElement>(options: ThavixtScrollbarOpt
     }
     // the `options` dep should be stable?
   }, [options, ref])
+
+  return ref;
 }
 
 export {

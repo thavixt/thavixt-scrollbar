@@ -30,9 +30,9 @@ if [[ "$*" == *"--pre"* ]]
 then
     exit 0
 else
-    printf "$prefix Release thavixt-scrollbar-$module v$version"
+    printf "$prefix Release thavixt-scrollbar-$module v$version\n"
     npm version $version 
     npm publish 
-    printf "$prefix Published thavixt-scrollbar-$module v$version"
+    printf "$prefix Published thavixt-scrollbar-$module v$version\n"
     cd ..
 fi
