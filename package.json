@@ -1,0 +1,30 @@
+{
+  "name": "thavixt-scrollbar",
+  "version": "1.0.0",
+  "description": "TODO",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --fix",
+    "pre-release": "sh ./release_all.sh --pre",
+    "release": "sh ./release_all.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thavixt/thavixt-scrollbar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thavixt/thavixt-scrollbar/issues"
+  },
+  "homepage": "https://github.com/thavixt/thavixt-scrollbar#readme",
+  "dependencies": {
+    "@eslint/js": "^9.20.0",
+    "eslint": "^9.20.1",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "globals": "^15.14.0",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.18.2"
+  }
+}

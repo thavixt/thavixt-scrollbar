@@ -1,7 +1,7 @@
-type ScrollDirection = 'top' | 'bottom' | 'left' | 'right';
+export type ScrollDirection = 'top' | 'bottom' | 'left' | 'right';
 
-type ScrollbarScrollDetails = Record<ScrollDirection, number>;
-type ScrollbarThresholdsReached = Partial<Record<ScrollDirection, boolean>>;
+export type ScrollbarScrollDetails = Record<ScrollDirection, number>;
+export type ScrollbarThresholdsReached = Partial<Record<ScrollDirection, boolean>>;
 
 export type ThavixtScrollbarOptions = Partial<{
   // Callback on scroll
@@ -25,8 +25,6 @@ export interface ThavixtScrollbarStyles {
   thumbHoverColor: string;
 }
 
-const CSS_STYLESHEET_ELEMENT_ID = 'thavixt_scrollbar_styles';
-
 const DEFAULT_SIZE = 8;
 const DEFAULT_COLOR_TRACK = 'transparent';
 const DEFAULT_COLOR_THUMB_LIGHT = 'black';
@@ -41,6 +39,7 @@ div[data-tsb-id="${id}"] {
   --tsb_height: ${styles.height ?? DEFAULT_SIZE}px;
   --tsb_trackColor: ${styles.trackColor ?? DEFAULT_COLOR_TRACK};
 }
+/* Theming */
 @media (prefers-color-scheme: light) {
   div[data-tsb-id="${id}"] {
   --tsb_thumbColor: ${styles.thumbColor ?? DEFAULT_COLOR_THUMB_LIGHT};
@@ -61,6 +60,7 @@ div[data-tsb-id="${id}"]::-webkit-scrollbar {
 /* Track */
 div[data-tsb-id="${id}"]::-webkit-scrollbar-track {
   background: var(--tsb_trackColor);
+  border-radius: 6px;
   }
 /* Handle */
 div[data-tsb-id="${id}"]::-webkit-scrollbar-thumb {
@@ -77,20 +77,25 @@ div[data-tsb-id="${id}"]::-webkit-scrollbar-corner {
 }`;
 }
 
-export class ThavixtScrollbar {
-  private animationElementId = crypto.randomUUID().slice(0, 8);
+export const DEFAULT_STYLES = createScrollbarStyles('REPLACEME').replace(/=\"REPLACEME\"/g, '');
+
+export class ThavixtScrollbar<T extends HTMLElement> {
+  private animationElementId = `thavixt_scrollbar_anim_${crypto.randomUUID().slice(0, 8)}`;
+  private styleId = `thavixt_scrollbar_styles_${crypto.randomUUID().slice(0, 8)}`;
   private scrollTop = 0;
   private scrollLeft = 0;
   private prevScrollDetails: null | Partial<ScrollbarScrollDetails> = null;
   private prevThresholdsReached: null | Partial<ScrollbarThresholdsReached> = null;
 
-  constructor(public container: HTMLDivElement, public options: ThavixtScrollbarOptions = {}) {
-    // console.log('ThavixtScorllbar created with options:', this.options, ' in container ', this.container);
+  constructor(public container: T, public options: ThavixtScrollbarOptions = {}) {
+    this.init();
+  }
+
+  private init = () => {
     this.addStyleSheet();
-    this.addScrollIndicatorElement();
     this.addEventListeners();
-    container.style.overflow = 'auto';
-    container.dataset["tsbId"] = this.animationElementId;
+    this.container.style.overflow = 'auto';
+    this.container.dataset["tsbId"] = this.animationElementId;
   }
 
   destroy = () => {
@@ -98,31 +103,23 @@ export class ThavixtScrollbar {
     this.removeEventListeners();
   }
 
-  private addScrollIndicatorElement = () => {
-    const div = document.createElement('div');
-    div.id = 'tsb-scrollIndicator';
-    this.container.appendChild(div);
-  }
-
   private addStyleSheet = () => {
-    const alreadyInjected = !!document.getElementById(CSS_STYLESHEET_ELEMENT_ID);
+    const alreadyInjected = !!document.getElementById(this.styleId);
     if (alreadyInjected) {
       this.removeStyleSheet();
     }
     const css = document.createElement('style');
-    css.id = CSS_STYLESHEET_ELEMENT_ID;
+    css.id = this.styleId;
     css.appendChild(document.createTextNode(createScrollbarStyles(this.animationElementId, this.options.styles)));
     this.container.appendChild(css);
-    // console.log('CSS injected');
   }
 
   private removeStyleSheet = () => {
-    const stylesheet = document.getElementById(CSS_STYLESHEET_ELEMENT_ID);
+    const stylesheet = document.getElementById(this.styleId);
     if (!stylesheet) {
       return;
     }
     stylesheet.remove();
-    // console.warn('injected stylesheet removed');
   }
 
   private addEventListeners = () => {
@@ -134,11 +131,12 @@ export class ThavixtScrollbar {
   }
 
   private onClick = () => {
-    // console.log('ThavixtScrollbar::onClick()')
+    // @todo
+    console.log('Not yet implemented - ThavixtScrollbar::onClick()')
   }
 
   private onScroll = (e: Event) => {
-    const target = e.target as HTMLDivElement;
+    const target = e.target as T;
 
     // scroll values
     const top = target.scrollTop;
@@ -181,7 +179,7 @@ export class ThavixtScrollbar {
 
 function filterTruthyValues<T extends Record<string, unknown>>(obj: T): Partial<T> {
   return Object.keys(obj).reduce((acc, key) => {
-    if (!!obj[key]) {
+    if (obj[key]) {
       return {
         ...acc,
         [key]: obj[key],

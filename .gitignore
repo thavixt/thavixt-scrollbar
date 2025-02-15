@@ -1,7 +1,16 @@
+# deps
+node_modules
+*/node_modules
+
+# env vars
+.env
 */.env
 
+# release scripts
 */release.sh
 release_all.sh
+release_output.txt
 */release_output.txt
 
+# test apps
 test-*-app

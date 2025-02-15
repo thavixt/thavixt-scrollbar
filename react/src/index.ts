@@ -1,10 +1,8 @@
 import { ThavixtScrollbar, ThavixtScrollbarOptions } from 'thavixt-scrollbar-core'
-import { RefObject, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
-export function useScrollbar(
-  ref: RefObject<HTMLDivElement | null>,
-  options: ThavixtScrollbarOptions,
-) {
+export function useScrollbar<T extends HTMLElement>(options: ThavixtScrollbarOptions) {
+  const ref = useRef<T>(null)
   const scrollbarRef = useRef<ThavixtScrollbar | null>(null);
 
   useEffect(() => {
