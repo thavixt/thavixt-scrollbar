@@ -1,6 +1,6 @@
 {
   "name": "thavixt-scrollbar-core",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A simple package to replace scrollbars with a custom one on your websites",
   "license": "MIT",
   "author": {
