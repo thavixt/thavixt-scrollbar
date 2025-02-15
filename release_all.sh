@@ -11,7 +11,7 @@ for i in "$@"; do
       VERSION="${i#*=}"
       shift # past argument=value
       ;;
-    -r=*|--release=*)
+    -r|--release)
       TYPE="release"
       shift # past argument=value
       ;;
@@ -45,15 +45,15 @@ next_ref="v$VERSION"
 
 printf "$prefix Perform $TYPE checks for v$VERSION"
 
-# ./core/release.sh $VERSION --pre
+./core/release.sh $VERSION --pre
 ./react/release.sh $VERSION --pre
 if [[ $TYPE = "pre-release" ]]; then
-  printf "\nPre-release checks finished.\nPerform an actual release with the -r=<anything> flag"
+  printf "\nPre-release checks finished.\nPerform an actual release with the -r|--release flag"
   exit
 fi
 
 printf "$prefix Create release of v$VERSION"
-# ./core/release.sh $VERSION
+./core/release.sh $VERSION
 ./react/release.sh $VERSION
 
 printf "$prefix Create release commit and tag for v$VERSION"
