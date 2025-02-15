@@ -1,7 +1,6 @@
 {
   "name": "thavixt-scrollbar",
-  "version": "1.0.0",
-  "description": "Replace the scrollbars of a container",
+  "description": "Monorepo for thavixt-scrollbar",
   "license": "MIT",
   "author": {
     "name": "Péter Komlósi",
