@@ -83,6 +83,4 @@ Type: `React.Ref<HTMLDivElement>`
 
 `ref` of an HTML element to customize the scrollbar of
 
-## Attributions
-
 [npm-img]:https://img.shields.io/npm/v/thavixt-scrollbar-react

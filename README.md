@@ -1,10 +1,13 @@
 # thavixt-scrollbar
 
-thavixt-scrollbarcore: ![npm package][npm-img-core]
+Customize your scrollbars in websites
 
-thavixt-scrollbarreact: ![npm package][npm-img-react]
+## Packages
 
-## Attributions
+| package name | info | npm link |
+| ------------- | ------------- | ------------- |
+| thavixt-scrollbar-core  | ![npm package][npm-img-core] | module for plain JS |
+| thavixt-scrollbar-react  | ![npm package][npm-img-react] | module for React |
 
 [npm-img-core]:https://img.shields.io/npm/v/thavixt-scrollbar-core
 [npm-img-react]:https://img.shields.io/npm/v/thavixt-scrollbar-react
