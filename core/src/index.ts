@@ -34,46 +34,55 @@ const DEFAULT_COLOR_THUMB_HOVER_DARK = 'white';
 
 const createScrollbarStyles = (id: string, styles: Partial<ThavixtScrollbarStyles> = {}): string => {
   return `/* Variables */
-div[data-tsb-id="${id}"] {
+[data-tsb-id="${id}"] {
   --tsb_width: ${styles.width ?? DEFAULT_SIZE}px;
   --tsb_height: ${styles.height ?? DEFAULT_SIZE}px;
   --tsb_trackColor: ${styles.trackColor ?? DEFAULT_COLOR_TRACK};
 }
 /* Theming */
 @media (prefers-color-scheme: light) {
-  div[data-tsb-id="${id}"] {
-  --tsb_thumbColor: ${styles.thumbColor ?? DEFAULT_COLOR_THUMB_LIGHT};
-  --tsb_thumbHoverColor: ${styles.thumbHoverColor ?? DEFAULT_COLOR_THUMB_HOVER_LIGHT};
+  [data-tsb-id="${id}"] {
+    --tsb_thumbColor: ${styles.thumbColor ?? DEFAULT_COLOR_THUMB_LIGHT};
+    --tsb_thumbHoverColor: ${styles.thumbHoverColor ?? DEFAULT_COLOR_THUMB_HOVER_LIGHT};
   }
 }
 @media (prefers-color-scheme: dark) {
-  div[data-tsb-id="${id}"] {
-  --tsb_thumbColor: ${styles.thumbColor ?? DEFAULT_COLOR_THUMB_DARK};
-  --tsb_thumbHoverColor: ${styles.thumbHoverColor ?? DEFAULT_COLOR_THUMB_HOVER_DARK};
+  [data-tsb-id="${id}"] {
+    --tsb_thumbColor: ${styles.thumbColor ?? DEFAULT_COLOR_THUMB_DARK};
+    --tsb_thumbHoverColor: ${styles.thumbHoverColor ?? DEFAULT_COLOR_THUMB_HOVER_DARK};
   }
 }
 /* Width */
-div[data-tsb-id="${id}"]::-webkit-scrollbar {
+[data-tsb-id="${id}"]::-webkit-scrollbar {
   width: var(--tsb_width);
   height: var(--tsb_height);
 }
 /* Track */
-div[data-tsb-id="${id}"]::-webkit-scrollbar-track {
+[data-tsb-id="${id}"]::-webkit-scrollbar-track {
   background: var(--tsb_trackColor);
-  border-radius: 6px;
-  }
+}
+[data-tsb-id="${id}"]::-webkit-scrollbar-corner {
+  background: transparent;
+}
 /* Handle */
-div[data-tsb-id="${id}"]::-webkit-scrollbar-thumb {
+[data-tsb-id="${id}"]::-webkit-scrollbar-thumb {
   background: var(--tsb_thumbColor);
   border-radius: 6px;
 }
 /* Handle on hover */
-div[data-tsb-id="${id}"]::-webkit-scrollbar-thumb:hover {
+[data-tsb-id="${id}"]::-webkit-scrollbar-thumb:hover {
   background: var(--tsb_thumbHoverColor);
 }
 /* Hide corner box */
-div[data-tsb-id="${id}"]::-webkit-scrollbar-corner {
+[data-tsb-id="${id}"]::-webkit-scrollbar-corner {
   background: var(--tsb_trackColor);
+}
+  
+/* Firefox styles */
+@supports (-moz-appearance:none) {
+  [data-tsb-id="${id}"] {
+    scrollbar-color: var(--tsb_thumbColor) var(--tsb_trackColor);
+  }
 }`;
 }
 
