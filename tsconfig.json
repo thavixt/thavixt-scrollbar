@@ -1,9 +1,9 @@
 {
 	"files": [],
 	"references": [
-		{ "path": "./packages/core/src" },
-		{ "path": "./packages/react/src" },
-		{ "path": "./packages/demo-react/src" }
+		{ "path": "./packages/core/package.json" },
+		{ "path": "./packages/react/package.json" },
+		{ "path": "./packages/demo-react/package.json" }
 	],
 	"exclude": [""]
 }

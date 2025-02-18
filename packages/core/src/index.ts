@@ -117,8 +117,8 @@ export class Scrollbar<T extends HTMLElement = HTMLElement> {
 		null;
 
 	constructor(
-		private container: T,
-		private options: ScrollbarOptions = {},
+		public container: T,
+		public options: ScrollbarOptions = {},
 	) {
 		this.tsbId = `_scrollbar_${crypto.randomUUID().slice(0, 8)}`;
 		this.styleId = `_scrollbar_style_${crypto.randomUUID().slice(0, 8)}`;

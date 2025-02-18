@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { ThavixtScrollbar, ThavixtScrollbarOptions } from "../src";
+import { Scrollbar, ScrollbarOptions } from "../src";
 
 describe("myPackage", () => {
 	it("should return an object with the scrollbar options provided", () => {
 		const container = document.createElement("div");
 		container.id = "mockDivId";
 
-		const options: ThavixtScrollbarOptions = {
+		const options: ScrollbarOptions = {
 			styles: { thumbColor: "red" },
 		};
 
-		const scrollbar = new ThavixtScrollbar(container, options);
+		const scrollbar = new Scrollbar(container, options);
 
 		expect(JSON.stringify(scrollbar.options)).toMatch(
 			'{"styles":{"thumbColor":"red"}}',

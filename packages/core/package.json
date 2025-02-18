@@ -35,5 +35,8 @@
     "dev": "tsc --watch --project tsconfig.build.json",
     "prepack": "npm run build"
   },
-  "gitHead": "19c61b809f965313ea135a9c7b0b62299c96a00e"
+  "gitHead": "19c61b809f965313ea135a9c7b0b62299c96a00e",
+  "devDependencies": {
+    "vitest": "^3.0.6"
+  }
 }
