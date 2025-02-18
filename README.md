@@ -23,3 +23,4 @@ Customize your scrollbars in websites
 - useful MDN articles:
   - [CSS scrollbars styling](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scrollbars_styling)
 - [Scrollbar styling - chrome for developers](https://developer.chrome.com/docs/css-ui/scrollbar-styling)
+- [Lerna docs](https://lerna.js.org/docs/features)
