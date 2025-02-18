@@ -25,7 +25,7 @@
   ],
   "type": "module",
   "scripts": {
-    "clean": "rimraf -g \"./packages/*/dist\"",
+    "cleanDist": "rimraf -g \"./packages/*/dist\"",
     "core:build": "npm run build -w @thavixt/scrollbar-core",
     "core:dev": "npm run dev -w @thavixt/scrollbar-core",
     "dev": "workspaces-run --parallel -- npm run dev",
@@ -39,7 +39,8 @@
     "react-demo:dev": "npm run dev -w @thavixt/scrollbar-demo-react",
     "react:build": "npm run build -w @thavixt/scrollbar-react",
     "react:dev": "npm run dev -w @thavixt/scrollbar-react",
-    "test": "vitest"
+    "tdd": "vitest",
+    "test": "vitest --run"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
