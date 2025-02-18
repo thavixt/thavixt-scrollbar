@@ -33,7 +33,7 @@
     "lerna:build": "npx lerna run build",
     "lerna:publish": "npx lerna publish --no-private --force-publish",
     "lint": "eslint --fix",
-    "react-demo:deploy": "npm run deploy -w thavixt-scrollbar-demo-react",
+    "react-demo:deploy": "vercel packages/demo-react",
     "react-demo:dev": "npm run dev -w thavixt-scrollbar-demo-react",
     "react:build": "npm run build -w thavixt-scrollbar-react",
     "react:dev": "npm run dev -w thavixt-scrollbar-react",
