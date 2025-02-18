@@ -31,7 +31,7 @@
     "dev": "workspaces-run --parallel -- npm run dev",
     "graph": "npx nx graph",
     "lerna:build": "npx lerna run build",
-    "lerna:publish": "npm run prebuild && npx lerna publish --no-private --force-publish",
+    "lerna:publish": "npx lerna publish --no-private --force-publish",
     "lint": "eslint --fix",
     "react-demo:deploy": "npm run deploy -w @thavixt/scrollbar-demo-react",
     "react-demo:dev": "npm run dev -w @thavixt/scrollbar-demo-react",
