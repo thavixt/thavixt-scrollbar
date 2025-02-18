@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	color-scheme: light dark;
+	color: light-dark(#242424, #f1f1f1);
+	background-color: light-dark(#f1f1f1, #242424);
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+a {
+	@apply font-bold text-blue-600 underline underline-offset-2;
+}
+
+a:hover {
+	color: #535bf2;
+}
+
+h1 {
+	@apply text-6xl;
+}
+
+button {
+	@apply bg-slate-800 dark:bg-slate-500;
+	@apply text-slate-300 dark:text-slate-200;
+	@apply font-bold rounded-md px-2 cursor-pointer;
+}
+
+code {
+	@apply text-slate-800 dark:text-slate-300;
+	@apply bg-slate-300 dark:bg-slate-800;
+	@apply rounded-sm px-1;
+	@apply inline-block;
+}
+
+summary {
+	@apply cursor-pointer;
+}
+
+ul>li>* {
+	@apply min-h-8;
+}
+
+input[type="color"] {
+	@apply w-24 h-8 border-0;
+}
+
+input[type="number"] {
+	@apply bg-slate-300 dark:bg-slate-800;
+	@apply text-slate-800 dark:text-slate-300;
+	@apply rounded-md w-24 text-center pr-1;
+}
+
+label {
+	@apply !mb-0;
+}
+
+/* table styles */
+table {
+	@apply divide-y-2 divide-gray-300 dark:divide-slate-500;
+	@apply text-xs md:text-base;
+}
+table tbody {
+	@apply divide-y divide-gray-300 dark:divide-slate-500;
+}
+table tr {
+	@apply h-8 md:h-10 hover:bg-slate-200 dark:hover:bg-slate-700;
+}
+table td {
+	@apply pr-0.5 md:pr-1;
+}
+
+.highlight {
+	@apply rounded-lg bg-slate-200 dark:bg-slate-900 text-slate-700 dark:text-white p-8;
+}
