@@ -1,5 +1,5 @@
 {
-  "name": "@thavixt/scrollbar-core",
+  "name": "thavixt-scrollbar-core",
   "version": "1.4.0",
   "private": false,
   "publishConfig": {

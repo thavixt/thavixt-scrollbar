@@ -1,7 +1,7 @@
 import {
 	Scrollbar,
 	ScrollbarOptions,
-} from "@thavixt/scrollbar-core";
+} from "thavixt-scrollbar-core";
 import { useEffect, useRef } from "react";
 
 export function useScrollbar<T extends HTMLElement = HTMLElement>(
@@ -31,7 +31,7 @@ export function useScrollbar<T extends HTMLElement = HTMLElement>(
 export {
 	DEFAULT_CSS_STYLESHEET,
 	DEFAULT_STYLES,
-} from '@thavixt/scrollbar-core';
+} from 'thavixt-scrollbar-core';
 export type {
 	ScrollbarStyles,
 	ScrollDirection,
@@ -39,6 +39,6 @@ export type {
 	ScrollbarOptions,
 	ScrollbarScrollDetails,
 	ScrollbarThresholdsReached,
-} from '@thavixt/scrollbar-core'
+} from 'thavixt-scrollbar-core'
 
 export default useScrollbar;

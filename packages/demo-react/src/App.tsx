@@ -4,7 +4,7 @@ import css from 'react-syntax-highlighter/dist/esm/languages/prism/css';
 import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
 import darkTheme from 'react-syntax-highlighter/dist/esm/styles/prism/material-dark';
 import lightTheme from 'react-syntax-highlighter/dist/esm/styles/prism/material-light';
-import { DEFAULT_CSS_STYLESHEET, DEFAULT_STYLES, useScrollbar, ScrollbarStyles } from "@thavixt/scrollbar-react";
+import { DEFAULT_CSS_STYLESHEET, DEFAULT_STYLES, useScrollbar, ScrollbarStyles } from "thavixt-scrollbar-react";
 import { useColorScheme } from "./useColorScheme";
 
 SyntaxHighlighter.registerLanguage('css', css);
@@ -53,7 +53,7 @@ function App() {
 	const { colorScheme, firstRender, toggle: toggleColorScheme } = useColorScheme('thavixt-scrollbar-demo');
 	const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
 
-	const codeReactHook = useMemo(() => `import { useScrollbar } from "@thavixt/scrollbar-react";
+	const codeReactHook = useMemo(() => `import { useScrollbar } from "thavixt-scrollbar-react";
 
 function MyCompontent() {
 		const ref = useRef(null);

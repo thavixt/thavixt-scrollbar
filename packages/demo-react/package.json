@@ -1,6 +1,6 @@
 {
-	"name": "@thavixt/scrollbar-demo-react",
-	"description": "Demo site of @thavixt/scrollbar-react",
+	"name": "thavixt-scrollbar-demo-react",
+	"description": "Demo site of thavixt-scrollbar-react",
 	"private": true,
 	"version": "1.0.0",
 	"type": "module",
@@ -14,12 +14,11 @@
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0"
 	},
-	"dependencies": {
-		"react-syntax-highlighter": "^15.6.1",
-		"@thavixt/scrollbar-core": "^1",
-		"@thavixt/scrollbar-react": "^1"
-	},
+	"dependencies": {},
 	"devDependencies": {
-		"@types/react-syntax-highlighter": "^15.5.13"
+		"@types/react-syntax-highlighter": "^15.5.13",
+		"react-syntax-highlighter": "^15.6.1",
+		"thavixt-scrollbar-core": "^1",
+		"thavixt-scrollbar-react": "^1"
 	}
 }
