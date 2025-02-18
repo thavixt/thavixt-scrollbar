@@ -4,7 +4,7 @@ Customize your scrollbars in websites
 
 # Demo
 
-[demo page](https://demo-thavixt-scrollbar-react-oen1yr2bx-thavixts-projects.vercel.app/)
+[demo page](https://thavixt-scrollbar.vercel.app/)
 
 ## Packages
 
