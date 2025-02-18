@@ -19,8 +19,6 @@ const codeCustomCSS = `div[data-tsb-id="myElement"]::-webkit-scrollbar-track {
 }`
 const globalCode = `// TODO`;
 
-const scriptTag = '<script src="https://github.com/thavixt/thavixt-scrollbar/blob/main/packages/core/dist/index.js" />'
-
 const numericScrollbarStyles = ["width", "height", "borderRadius"];
 
 const demoStyles: ScrollbarStyles = {
@@ -121,14 +119,6 @@ function MyCompontent() {
 						<NPMBadge packageName="thavixt-scrollbar-core" />
 						<code>npm i thavixt-scrollbar-core</code>
 					</div>
-					<p>or directly in a script tag:</p>
-					<SyntaxHighlighter
-						language="html"
-						style={theme}
-						customStyle={customStyle}
-					>
-						{scriptTag}
-					</SyntaxHighlighter>
 				</div>
 				<div>
 					<em><b>react</b> package</em>
