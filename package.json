@@ -30,7 +30,7 @@
     "core:dev": "npm run dev -w @thavixt/scrollbar-core",
     "dev": "workspaces-run --parallel -- npm run dev",
     "graph": "npx nx graph",
-    "lerna:build": "npx lerna build",
+    "lerna:build": "npx lerna run build",
     "lerna:publish": "npm run prebuild && npx lerna publish --no-private --force-publish",
     "lint": "eslint",
     "prebuild": "npm run clean && npm run test &&np run prettify && npm run lint",
