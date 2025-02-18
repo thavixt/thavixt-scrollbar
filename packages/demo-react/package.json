@@ -9,15 +9,14 @@
 		"dev": "vite",
 		"preview": "vite preview"
 	},
-	"peerDependencies": {
-		"react": "^19.0.0",
-		"react-dom": "^19.0.0"
-	},
 	"dependencies": {},
 	"devDependencies": {
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
 		"@types/react-syntax-highlighter": "^15.5.13",
 		"react-syntax-highlighter": "^15.6.1",
 		"thavixt-scrollbar-core": "^1",
-		"thavixt-scrollbar-react": "^1"
+		"thavixt-scrollbar-react": "^1",
+    "vite": "^6.1.0"
 	}
 }
