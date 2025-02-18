@@ -19,7 +19,7 @@ const codeCustomCSS = `div[data-tsb-id="myElement"]::-webkit-scrollbar-track {
 }`
 const globalCode = `// TODO`;
 
-const scriptTag = '<script src="https://github.com/thavixt/thavixt-scrollbar/blob/main/core/src/index.ts" />'
+const scriptTag = '<script src="https://github.com/thavixt/thavixt-scrollbar/blob/main/packages/core/dist/index.js" />'
 
 const numericScrollbarStyles = ["width", "height", "borderRadius"];
 
