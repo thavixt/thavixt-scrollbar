@@ -38,7 +38,7 @@
     "react-demo:dev": "npm run dev -w @thavixt/scrollbar-demo-react",
     "react-demo:deploy": "npm run deploy -w @thavixt/scrollbar-demo-react",
     "npm:version": "npx lerna version --no-private",
-    "npm:publish": "npx lerna publish --no-private"
+    "npm:publish": "npx lerna publish --no-private --force-publish"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
