@@ -8,13 +8,10 @@ Customize your scrollbars in websites
 
 ## Packages
 
-| package name            | info                          | npm link            |
-| ----------------------- | ----------------------------- | ------------------- |
-| thavixt-scrollbar-core  | ![npm package][npm-img-core]  | module for plain JS |
-| thavixt-scrollbar-react | ![npm package][npm-img-react] | module for React    |
-
-[npm-img-core]: https://img.shields.io/npm/v/thavixt-scrollbar-core
-[npm-img-react]: https://img.shields.io/npm/v/thavixt-scrollbar-react
+| package name | info | npm link | docs |
+| - | - | - | - |
+| thavixt-scrollbar-core  | ![npm package][npm-img-core]  | module for plain JS | [link][core-readme] |
+| thavixt-scrollbar-react | ![npm package][npm-img-react] | module for React | [link][react-readme] |
 
 ## Notes
 
@@ -24,3 +21,10 @@ Customize your scrollbars in websites
   - [CSS scrollbars styling](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scrollbars_styling)
 - [Scrollbar styling - chrome for developers](https://developer.chrome.com/docs/css-ui/scrollbar-styling)
 - [Lerna docs](https://lerna.js.org/docs/features)
+- [stackoverflow comment on npm package renaming](https://stackoverflow.com/a/56197360/9964256)
+
+[npm-img-core]: https://img.shields.io/npm/v/thavixt-scrollbar-core
+[core-readme]: packages/core/README.md
+
+[npm-img-react]: https://img.shields.io/npm/v/thavixt-scrollbar-react
+[react-readme]: packages/react/README.md
