@@ -1,7 +1,6 @@
 {
 	"name": "@thavixt/scrollbar-react",
 	"description": "React hook to customize the scrollbars with a custom one on your websites",
-	"private": true,
 	"version": "1.2.4",
 	"type": "module",
 	"license": "MIT",
