@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
+/* @custom-variant dark (&:where(.dark, .dark *)); */
 
 body {
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -8,8 +8,9 @@ body {
 	font-weight: 400;
 
 	color-scheme: light dark;
-	color: light-dark(#242424, #f1f1f1);
-	background-color: light-dark(#f1f1f1, #242424);
+	@apply bg-slate-100 dark:bg-gray-800;
+	@apply text-slate-900 dark:text-slate-300;
+	@apply min-w-full;
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
@@ -18,27 +19,24 @@ body {
 }
 
 a {
-	@apply font-bold text-blue-600 underline underline-offset-2;
-}
-
-a:hover {
-	color: #535bf2;
+	@apply font-bold text-blue-600 hover:text-indigo-600 visited:text-purple-600 underline underline-offset-2;
 }
 
 h1 {
-	@apply text-6xl;
+	@apply text-6xl font-serif;
 }
 
 button {
-	@apply bg-slate-800 dark:bg-slate-500;
+	@apply bg-slate-800 dark:bg-slate-600;
 	@apply text-slate-300 dark:text-slate-200;
-	@apply font-bold rounded-md px-2 cursor-pointer;
+	@apply rounded-sm px-2 py-1 cursor-pointer;
+	@apply hover:bg-slate-600 dark:hover:bg-slate-700;
 }
 
 code {
-	@apply text-slate-800 dark:text-slate-300;
-	@apply bg-slate-300 dark:bg-slate-800;
-	@apply rounded-sm px-1;
+	@apply text-slate-800 dark:text-white;
+	@apply bg-slate-300 dark:bg-slate-600;
+	@apply rounded-xs px-1;
 	@apply inline-block;
 }
 
@@ -55,7 +53,7 @@ input[type="color"] {
 }
 
 input[type="number"] {
-	@apply bg-slate-300 dark:bg-slate-800;
+	@apply bg-slate-300 dark:bg-slate-600;
 	@apply text-slate-800 dark:text-slate-300;
 	@apply rounded-md w-24 text-center pr-1;
 }
@@ -66,17 +64,16 @@ label {
 
 /* table styles */
 table {
-	@apply divide-y-2 divide-gray-300 dark:divide-slate-500;
-	@apply text-xs md:text-base;
+	@apply divide-y-2 divide-gray-300 dark:divide-slate-500 text-xs;
 }
 table tbody {
 	@apply divide-y divide-gray-300 dark:divide-slate-500;
 }
 table tr {
-	@apply h-8 md:h-10 hover:bg-slate-200 dark:hover:bg-slate-700;
+	@apply h-8 md:h-10 hover:bg-slate-200 dark:hover:bg-slate-900;
 }
 table td {
-	@apply pr-0.5 md:pr-1;
+	@apply p-1;
 }
 
 .highlight {

@@ -8,14 +8,14 @@ export type ScrollbarOptions = Partial<{
 }>;
 export type ScrollbarStyles = Partial<{
     borderRadius: number;
+    width: number;
     height: number;
     thumbColor: string;
-    thumbColorDark: string;
     thumbHoverColor: string;
-    thumbHoverColorDark: string;
     trackColor: string;
+    thumbColorDark: string;
+    thumbHoverColorDark: string;
     trackColorDark: string;
-    width: number;
 }>;
 export declare const DEFAULT_STYLES: Required<ScrollbarStyles>;
 export declare const DEFAULT_CSS_STYLESHEET: string;

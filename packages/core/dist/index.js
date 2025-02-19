@@ -7,30 +7,58 @@ const DEFAULT_TRACK_COLOR_DARK = "transparent";
 const DEFAULT_TRACK_SIZE = 8;
 const DEFAULT_TRACK_BORDER_RADIUS = 8;
 export const DEFAULT_STYLES = {
+    // Border radius
+    borderRadius: DEFAULT_TRACK_BORDER_RADIUS,
+    // Dimensions
     width: DEFAULT_TRACK_SIZE,
     height: DEFAULT_TRACK_SIZE,
-    borderRadius: DEFAULT_TRACK_BORDER_RADIUS,
+    // Light theme colors
     thumbColor: DEFAULT_THUMB_COLOR,
-    thumbColorDark: DEFAULT_THUMB_COLOR_DARK,
     thumbHoverColor: DEFAULT_THUMB_HOVER_COLOR,
-    thumbHoverColorDark: DEFAULT_THUMB_HOVER_COLOR_DARK,
     trackColor: DEFAULT_TRACK_COLOR,
+    // Dark theme colors
+    thumbColorDark: DEFAULT_THUMB_COLOR_DARK,
+    thumbHoverColorDark: DEFAULT_THUMB_HOVER_COLOR_DARK,
     trackColorDark: DEFAULT_TRACK_COLOR_DARK,
 };
 const createScrollbarStyles = (id, styles = {}) => {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j;
     const elementSelector = id ? `[data-tsb-id="${id}"]` : `*`;
-    const scopedVariables = `/* Variables */
+    // border radius
+    const borderRadius = (_a = styles.borderRadius) !== null && _a !== void 0 ? _a : DEFAULT_TRACK_BORDER_RADIUS;
+    // dimensions
+    const width = (_b = styles.width) !== null && _b !== void 0 ? _b : DEFAULT_TRACK_SIZE;
+    const height = (_c = styles.height) !== null && _c !== void 0 ? _c : DEFAULT_TRACK_SIZE;
+    // light colors
+    const thumbColor = (_d = styles.thumbColor) !== null && _d !== void 0 ? _d : DEFAULT_THUMB_COLOR;
+    const thumbHoverColor = (_e = styles.thumbHoverColor) !== null && _e !== void 0 ? _e : DEFAULT_THUMB_HOVER_COLOR;
+    const trackColor = (_f = styles.trackColor) !== null && _f !== void 0 ? _f : DEFAULT_TRACK_COLOR;
+    // dark colors
+    const thumbColorDark = (_g = styles.thumbColorDark) !== null && _g !== void 0 ? _g : DEFAULT_THUMB_COLOR_DARK;
+    const thumbHoverColorDark = (_h = styles.thumbHoverColorDark) !== null && _h !== void 0 ? _h : DEFAULT_THUMB_HOVER_COLOR_DARK;
+    const trackColorDark = (_j = styles.trackColorDark) !== null && _j !== void 0 ? _j : DEFAULT_TRACK_COLOR_DARK;
+    const variables = `/* Variables */
 ${elementSelector} {
-	--tsb_width: ${(_a = styles.width) !== null && _a !== void 0 ? _a : DEFAULT_TRACK_SIZE}px;
-	--tsb_height: ${(_b = styles.height) !== null && _b !== void 0 ? _b : DEFAULT_TRACK_SIZE}px;
-	--tsb_trackColor: ${`light-dark(${(_c = styles.trackColor) !== null && _c !== void 0 ? _c : DEFAULT_TRACK_COLOR}, ${(_d = styles.trackColorDark) !== null && _d !== void 0 ? _d : DEFAULT_TRACK_COLOR_DARK})`};
-	--tsb_thumbColor: ${`light-dark(${(_e = styles.thumbColor) !== null && _e !== void 0 ? _e : DEFAULT_THUMB_COLOR}, ${(_f = styles.thumbColorDark) !== null && _f !== void 0 ? _f : DEFAULT_THUMB_COLOR_DARK})`};
-	--tsb_thumbHoverColor: ${`light-dark(${(_g = styles.thumbHoverColor) !== null && _g !== void 0 ? _g : DEFAULT_THUMB_HOVER_COLOR}, ${(_h = styles.thumbHoverColorDark) !== null && _h !== void 0 ? _h : DEFAULT_THUMB_HOVER_COLOR_DARK})`};
-	--tsb_borderRadius: ${styles.borderRadius}px;
+	--tsb_width: ${width}px;
+	--tsb_height: ${height}px;
+	--tsb_borderRadius: ${borderRadius ? `${borderRadius}px` : `initial`};
+}
+${elementSelector} {
+	--tsb_scrollCornerBackground: ${borderRadius ? `initial` : 'transparent'};
+	--tsb_thumbColor: ${thumbColor};
+	--tsb_thumbHoverColor: ${thumbHoverColor};
+	--tsb_trackColor: ${trackColor};
+}
+@media (prefers-color-scheme: dark) {
+	${elementSelector} {
+		--tsb_thumbColor: ${thumbColorDark};
+		--tsb_thumbHoverColor: ${thumbHoverColorDark};
+		--tsb_trackColor: ${trackColorDark};
+	}
 }`;
-    const scopedStyles = `${scopedVariables}
-/* scrollbar size */
+    const scopedStyles = `/* thavixt-scrollbar stylesheet for element ${elementSelector} */
+${variables}
+/* dimensions */
 ${elementSelector}::-webkit-scrollbar {
 	width: var(--tsb_width);
 	height: var(--tsb_height);
@@ -38,26 +66,22 @@ ${elementSelector}::-webkit-scrollbar {
 
 /* scrollbar track style */
 ${elementSelector}::-webkit-scrollbar-track {
-	background: var(--tsb_trackColor);
 	border-radius: var(--tsb_borderRadius);
+	background: var(--tsb_trackColor);
 }
 
-/* vertical scrollbar track style */
-${elementSelector}::-webkit-scrollbar-vertical {}
-
-/* horizontal scrollbar track style */
-${elementSelector}::-webkit-scrollbar-horizontal {}
-
-/* scrollbar track corner style - where horizontal and vertical tracks meet */
+/* scrollbar track corner style */
 ${elementSelector}::-webkit-scrollbar-corner {
-	${((_j = styles.borderRadius) !== null && _j !== void 0 ? _j : DEFAULT_TRACK_BORDER_RADIUS) > 0 ? `background: transparent;` : `background: var(--tsb_trackColor);`}
+	background: var(--tsb_scrollCornerBackground);
 }
 
 /* scrollbar thumb styles */
 ${elementSelector}::-webkit-scrollbar-thumb {
+	border-radius: var(--tsb_borderRadius);
 	background: var(--tsb_thumbColor);
-	${styles.borderRadius ? `border-radius: var(--tsb_borderRadius);` : ``}
 }
+
+/* scrollbar hovered thumb styles */
 ${elementSelector}::-webkit-scrollbar-thumb:hover {
 	background: var(--tsb_thumbHoverColor);
 }
@@ -145,7 +169,7 @@ export class Scrollbar {
             this.scrollLeft = left;
             const thresholdsReachedChanged = JSON.stringify(thresholdsReached) !==
                 JSON.stringify(this.prevThresholdsReached);
-            if (thresholdsReachedChanged) {
+            if (thresholdsReachedChanged && Object.keys(thresholdsReached).length) {
                 if (this.prevThresholdsReached && this.options.onScrollToEnd) {
                     this.options.onScrollToEnd(thresholdsReached);
                 }

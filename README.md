@@ -13,6 +13,13 @@ Customize your scrollbars in websites
 | thavixt-scrollbar-core  | ![npm package][npm-img-core]  | module for plain JS | [link][core-readme] |
 | thavixt-scrollbar-react | ![npm package][npm-img-react] | module for React | [link][react-readme] |
 
+# Todo
+
+- [ ] separate vertical and horizontal scrollbar styles
+- [ ] animation/transitio/shadow/pseudo element on reaching a scroll threshold (top/bottom/left/right)
+- [ ] more test coverage
+- [ ] lots of code cleanup ..
+
 ## Notes
 
 - using [npm workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces#defining-workspaces)

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import css from 'react-syntax-highlighter/dist/esm/languages/prism/css';
 import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
@@ -6,62 +6,20 @@ import darkTheme from 'react-syntax-highlighter/dist/esm/styles/prism/material-d
 import lightTheme from 'react-syntax-highlighter/dist/esm/styles/prism/material-light';
 import { DEFAULT_CSS_STYLESHEET, DEFAULT_STYLES, useScrollbar, ScrollbarStyles, ScrollbarThresholdsReached } from "thavixt-scrollbar-react";
 import { useColorScheme } from "./useColorScheme";
+import { codeCustomCSS, sytaxHighlighterStyle, demoGradientStyles, demoStyles, getText, globalCode, numericScrollbarStyles, styleDescriptions } from "./components/constants";
+import { CopyContentToClipboardButton } from "./components/CopyContentToClipboardButton";
+import { NPMBadge } from "./components/NPMBadge";
 
 SyntaxHighlighter.registerLanguage('css', css);
 SyntaxHighlighter.registerLanguage('tsx', tsx);
 
-const customStyle = { maxHeight: 250, overflow: "auto", padding: '2px 4px', fontSize: 12 };
-const lorem = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus nihil quasi enim, harum, delectus vero ipsa hic, animi aliquam numquam consequatur adipisci vel nemo tempore maiores eveniet nesciunt! Perferendis, molestias neque? Et quo maxime id consequuntur sequi officia, libero est itaque hic doloribus expedita repellat in provident facilis rem inventore, modi odit vitae atque error!`;
-const getText = (count: number) => new Array(count).fill(lorem).join("\n");
-const codeCustomCSS = `div[data-tsb-id="myElement"]::-webkit-scrollbar-track {
-  background: pink;
-  border-radius: 6px;
-}`
-const globalCode = `/**
-* If you provide the second argument 'applyToBody' as true,
-* all scrollbars on the page will be affected.
-*
-* When doing this, the 'useScrollbar' hook will *not* have a return value.
-* Since the styling is done with CSS, all elements created subsequently
-* will have the scrollbar styles applied.
-**/
-useScrollbar({ styles, onScrollToEnd }, true);
-`;
-
-const numericScrollbarStyles = ["width", "height", "borderRadius"];
-
-const demoStyles: ScrollbarStyles = {
-	...DEFAULT_STYLES,
-	width: 10,
-	height: 10,
-	thumbColor: '#ee6820',
-	thumbColorDark: '#30d94c',
-	thumbHoverColor: '#f033d7',
-	thumbHoverColorDark: '#eb6060',
-	trackColor: '#434242',
-	trackColorDark: '#ddd4d4',
-}
-
-const styleDescriptions: Record<keyof ScrollbarStyles, string> = {
-	borderRadius: 'radius of the thumb and track (px)',
-	height: 'height of horizontal scrollbar (px)',
-	thumbColor: 'color of the thumb you drag when scrolling (hex)',
-	thumbColorDark: 'color of the thumb you drag when scrolling (hex)',
-	thumbHoverColor: 'color of the thumb when hovered (hex)',
-	thumbHoverColorDark: 'color of the thumb when hovered (hex)',
-	trackColor: 'color of the scroll track (hex)',
-	trackColorDark: 'color of the scroll track (hex)',
-	width: 'width of vertical scrollbar (px)',
-}
-
 function App() {
-	const [placeholderCount, setPlaceholderCount] = useState(10);
-	const [styles, setStyles] = useState<ScrollbarStyles>(demoStyles);
-	const { colorScheme, toggle: toggleColorScheme } = useColorScheme('thavixt-scrollbar-demo');
+	const colorScheme = useColorScheme();
 	const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+
+	const [placeholderCount, setPlaceholderCount] = useState(10);
 	const [applyToBody, setApplyToBody] = useState(false);
-	const [logs, setLogs] = useState<string[]>([]);
-	const logContainerRef = useRef<HTMLDivElement>(null);
+	const [styles, setStyles] = useState<ScrollbarStyles>(demoStyles);
 
 	const codeReactHook = useMemo(() => `import { useScrollbar } from "thavixt-scrollbar-react";
 
@@ -96,29 +54,18 @@ function MyCompontent() {
 		styles.width,
 	]);
 
-	const resetDemoToDefaults = useCallback(() => {
-		setStyles(demoStyles);
-	}, []);
-
-	const resetToLibDefaults = useCallback(() => {
-		setStyles(DEFAULT_STYLES);
+	const setDemoStyles = useCallback((styles: ScrollbarStyles) => {
+		setStyles(styles);
 	}, []);
 
 	const onScrollToEnd = useCallback((reached: ScrollbarThresholdsReached) => {
-		const log = `${new Date().toJSON()}: Reached ${Object.keys(reached).join(', ')}`;
-		setLogs(prev => ([...prev, log]));
+		console.log(`[thavixt-scrollbar-demo] ${new Date().toJSON()} ${Object.keys(reached).join(', ')}`);
 	}, []);
-
-	useEffect(() => {
-		if (logContainerRef.current) {
-			logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
-		}
-	}, [logs.length])
 
 	const ref = useScrollbar({ styles, onScrollToEnd }, applyToBody);
 
 	return (
-		<div className="mx-auto w-full max-w-2xl lg:max-w-6xl flex flex-col lg:grid lg:grid-cols-2 gap-x-8 gap-y-16 p-8 pb-24">
+		<div className="mx-auto w-full max-w-2xl lg:max-w-7xl flex flex-col xl:grid xl:grid-cols-2 gap-8 gap-y-32 pt-8 pb-24 px-8 items-center">
 			<div className="col-span-2">
 				<h1>thavixt-scrollbar</h1>
 			</div>
@@ -130,19 +77,23 @@ function MyCompontent() {
 						Check out the project on Github
 					</a>
 				</b>
-				<p>made by <a href="https://github.com/thavixt" target="_blank">thavixt@github</a></p>
+				<p className="pt-16">
+					<small>
+						made by <a href="https://github.com/thavixt" target="_blank">thavixt@github</a>
+					</small>
+				</p>
 			</div>
 
 			<div className="flex flex-col gap-4 highlight">
 				<b>Installation:</b>
-				<div>
+				<div className="flex flex-col gap-2">
 					<em><b>core</b> package for use without a framework</em>
 					<div className="flex gap-2">
 						<NPMBadge packageName="thavixt-scrollbar-core" />
 						<code>npm i thavixt-scrollbar-core</code>
 					</div>
 				</div>
-				<div>
+				<div className="flex flex-col gap-2">
 					<em><b>react</b> package</em>
 					<div className="flex gap-2">
 						<NPMBadge packageName="thavixt-scrollbar-react" />
@@ -155,7 +106,7 @@ function MyCompontent() {
 				</div>
 			</div>
 
-			<div className="flex flex-col gap-2">
+			<div className="flex flex-col gap-8">
 				<b>Features:</b>
 				<ul className="list-disc list-inside">
 					<li>
@@ -178,14 +129,15 @@ function MyCompontent() {
 
 					<li>
 						Style customization: (change the values to play with the demo)
-						<div className="w-[400px] md:w-full overflow-x-auto">
-							<div className="pl-4">
-								<table className="table-fixed">
+						<div className="w-full overflow-x-auto">
+							<div className="pl-6">
+								<table className="table-auto w-full">
 									<thead>
 										<tr>
 											<th>key</th>
 											<th>default</th>
-											<th>demo style</th>
+											<th>set demo style</th>
+											<th>demo style value</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -202,41 +154,44 @@ function MyCompontent() {
 														<code>{DEFAULT_STYLES[key]}</code>
 													</td>
 													<td>
-														{numericScrollbarStyles.includes(
-															key,
-														) ? (
-															<input
-																type="number"
-																min="0"
-																max="100"
-																id={key}
-																name={key}
-																value={styles[key]}
-																onChange={(e) =>
-																	setStyles((prev) => ({
-																		...prev,
-																		[key]: e.target
-																			.value,
-																	}))
-																}
-															/>
-														) : (
-															<input
-																type="color"
-																id={key}
-																name={key}
-																value={styles[key]}
-																onChange={(e) =>
-																	setStyles((prev) => ({
-																		...prev,
-																		[key]: e.target
-																			.value,
-																	}))
-																}
-															/>
-														)}
-														{' '}
-														<code>{styles[key]}</code>
+														<div className="inline-flex items-center justify-center gap-2">
+															{numericScrollbarStyles.includes(key) ? (
+																<input
+																	type="number"
+																	min="0"
+																	max="100"
+																	id={key}
+																	name={key}
+																	value={styles[key]}
+																	onChange={(e) =>
+																		setStyles((prev) => ({
+																			...prev,
+																			[key]: e.target
+																				.value,
+																		}))
+																	}
+																/>
+															) : (
+																<input
+																	type="color"
+																	id={key}
+																	name={key}
+																	value={styles[key]}
+																	onChange={(e) =>
+																		setStyles((prev) => ({
+																			...prev,
+																			[key]: e.target
+																				.value,
+																		}))
+																	}
+																/>
+															)}
+														</div>
+													</td>
+													<td>
+														<CopyContentToClipboardButton>
+															<code>{styles[key]}</code>
+														</CopyContentToClipboardButton>
 													</td>
 												</tr>
 											);
@@ -248,11 +203,11 @@ function MyCompontent() {
 					</li>
 				</ul>
 
-				<div className="w-full flex flex-col justify-center items-center gap-2">
-					<button type="button" onClick={resetDemoToDefaults}>Reset styles to demo defaults</button>
-					<button type="button" onClick={resetToLibDefaults}>Reset styles to library defaults</button>
+				<div className="w-full flex justify-center items-center gap-2">
+					<button type="button" onClick={() => setDemoStyles(DEFAULT_STYLES)}>Set to library defaults</button>
+					<button type="button" onClick={() => setDemoStyles(demoStyles)}>Set to demo defaults</button>
+					<button type="button" onClick={() => setDemoStyles(demoGradientStyles)}>Show some gradients</button>
 				</div>
-
 			</div>
 
 			<div className="flex flex-col gap-2">
@@ -262,14 +217,14 @@ function MyCompontent() {
 					<SyntaxHighlighter
 						language="tsx"
 						style={theme}
-						customStyle={customStyle}
+						customStyle={sytaxHighlighterStyle}
 					>
 						{codeReactHook}
 					</SyntaxHighlighter>
 				</details>
 				<div
 					ref={ref}
-					className="h-[300px] w-full max-w-[700px] overflow-auto whitespace-pre"
+					className="h-[300px] w-[600px] overflow-auto whitespace-pre"
 				>
 					{getText(placeholderCount * 3)}
 				</div>
@@ -277,12 +232,6 @@ function MyCompontent() {
 				<p>Check the dev console <code>F12</code> to see logs.</p>
 
 				<div className="flex flex-col gap-2 items-center justify-center">
-					<button
-						onClick={toggleColorScheme}
-						type="button"
-					>
-						Change theme to {colorScheme === "light" ? "dark" : "light"}
-					</button>
 					<div className="flex gap-2">
 						<label htmlFor="count">
 							# of placeholder lines:
@@ -299,7 +248,7 @@ function MyCompontent() {
 				</div>
 			</div>
 
-			<div className="flex flex-col gap-2">
+			<div className="flex flex-col gap-2 highlight">
 				<b>Apply globally:</b>
 				<div className="flex gap-2 items-center justify-start">
 					<label htmlFor="body">apply to every scrollbar on this page:</label>
@@ -309,18 +258,18 @@ function MyCompontent() {
 				<SyntaxHighlighter
 					language="tsx"
 					style={theme}
-					customStyle={customStyle}
+					customStyle={sytaxHighlighterStyle}
 				>
 					{globalCode}
 				</SyntaxHighlighter>
 			</div>
 
 			<div className="flex flex-col gap-2">
-				<b>Default CSS styles:</b>
+				<b>Default stylesheet applied:</b>
 				<SyntaxHighlighter
 					language="css"
 					style={theme}
-					customStyle={customStyle}
+					customStyle={sytaxHighlighterStyle}
 				>
 					{DEFAULT_CSS_STYLESHEET}
 				</SyntaxHighlighter>
@@ -330,7 +279,7 @@ function MyCompontent() {
 				<SyntaxHighlighter
 					language="css"
 					style={theme}
-					customStyle={customStyle}
+					customStyle={sytaxHighlighterStyle}
 				>
 					{codeCustomCSS}
 				</SyntaxHighlighter>
@@ -338,14 +287,6 @@ function MyCompontent() {
 
 		</div>
 	);
-}
-
-function NPMBadge({ packageName }: { packageName: string }) {
-	return (
-		<a href={`https://www.npmjs.com/package/${packageName}`} target="_blank">
-			<img src={`https://img.shields.io/npm/v/${packageName}`} alt={`${packageName}on npm`} />
-		</a>
-	)
 }
 
 export default App;
