@@ -37,7 +37,8 @@
     "react:dev": "npm run dev -w thavixt-scrollbar-react",
     "tdd": "vitest",
     "test": "vitest --run",
-    "website:deploy": "vercel --force packages/website",
+    "website:deploy-preview": "vercel --force packages/website",
+    "website:deploy-prod": "vercel --force --prod packages/website",
     "website:dev": "npm run dev -w thavixt-scrollbar-website"
   },
   "devDependencies": {
