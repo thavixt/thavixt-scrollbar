@@ -26,8 +26,8 @@ export const demoStyles: ScrollbarStyles = {
 
 export const demoGradientStyles: ScrollbarStyles = {
 	...DEFAULT_STYLES,
-	thumbHoverColor: 'orange',
-	thumbHoverColorDark: 'orange',
+	thumbHoverColor: '#ffa500',
+	thumbHoverColorDark: '#ffa500',
 	thumbColor: 'radial-gradient(circle, rgba(45,157,253,1) 0%, rgba(195,34,45,1) 100%)',
 	thumbColorDark: 'radial-gradient(circle, rgba(253,156,45,1) 0%, rgba(34,195,180,1) 100%)',
 	trackColor: 'linear-gradient(0deg, rgba(253,187,45,1) 0%, rgba(34,193,195,1) 100%)',
