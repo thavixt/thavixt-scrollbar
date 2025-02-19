@@ -137,7 +137,7 @@ export class Scrollbar<T extends HTMLElement = HTMLElement> {
 	destroy = () => {
 		this.removeStyleSheet();
 		this.removeEventListeners();
-		this.container.style.overflow = "initial";
+		// this.container.style.overflow = "initial";
 		delete this.container.dataset["tsbId"];
 	};
 
