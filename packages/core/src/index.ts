@@ -31,7 +31,7 @@ const DEFAULT_THUMB_HOVER_COLOR = "#888899";
 const DEFAULT_THUMB_HOVER_COLOR_DARK = "#ccccdd";
 const DEFAULT_TRACK_COLOR = "transparent";
 const DEFAULT_TRACK_COLOR_DARK = "transparent";
-const DEFAULT_TRACK_SIZE = 6;
+const DEFAULT_TRACK_SIZE = 8;
 const DEFAULT_TRACK_BORDER_RADIUS = 8;
 
 export const DEFAULT_STYLES: Required<ScrollbarStyles> = {
@@ -48,11 +48,11 @@ export const DEFAULT_STYLES: Required<ScrollbarStyles> = {
 
 const createScrollbarStyles = (
 	id: string | null,
-	styles: Partial<ScrollbarStyles> = {},
+	styles: ScrollbarStyles = {},
 ): string => {
-	const elementSelector = id ? `[data-tsb-id="${id}"]` : `:root`;
-	const scopedVariables = `${elementSelector} {
-	/* Variables */
+	const elementSelector = id ? `[data-tsb-id="${id}"]` : `*`;
+	const scopedVariables = `/* Variables */
+${elementSelector} {
 	--tsb_width: ${styles.width ?? DEFAULT_TRACK_SIZE}px;
 	--tsb_height: ${styles.height ?? DEFAULT_TRACK_SIZE}px;
 	--tsb_trackColor: ${`light-dark(${styles.trackColor ?? DEFAULT_TRACK_COLOR}, ${styles.trackColorDark ?? DEFAULT_TRACK_COLOR_DARK})`};
@@ -61,37 +61,39 @@ const createScrollbarStyles = (
 	--tsb_borderRadius: ${styles.borderRadius}px;
 }`;
 
-	// Apply styles globally
-	if (!id) {
-		return `${scopedVariables}`;
-	}
-
 	const scopedStyles = `${scopedVariables}
-/* more specific selectors allowing for more customization */ 
+/* scrollbar size */
 ${elementSelector}::-webkit-scrollbar {
 	width: var(--tsb_width);
 	height: var(--tsb_height);
 }
+
+/* scrollbar track style */
 ${elementSelector}::-webkit-scrollbar-track {
 	background: var(--tsb_trackColor);
 	border-radius: var(--tsb_borderRadius);
 }
-${elementSelector}::-webkit-scrollbar-vertical {
-	/* vertical scrollbar styles */
-}
-${elementSelector}::-webkit-scrollbar-horizontal {
-	/* horizontal scrollbar styles */
-}
+
+/* vertical scrollbar track style */
+${elementSelector}::-webkit-scrollbar-vertical {}
+
+/* horizontal scrollbar track style */
+${elementSelector}::-webkit-scrollbar-horizontal {}
+
+/* scrollbar track corner style - where horizontal and vertical tracks meet */
 ${elementSelector}::-webkit-scrollbar-corner {
-	background: transparent;
+	${(styles.borderRadius ?? DEFAULT_TRACK_BORDER_RADIUS) > 0 ? `background: transparent;` : `background: var(--tsb_trackColor);`}
 }
+
+/* scrollbar thumb styles */
 ${elementSelector}::-webkit-scrollbar-thumb {
 	background: var(--tsb_thumbColor);
-	border-radius: var(--tsb_borderRadius);
+	${styles.borderRadius ? `border-radius: var(--tsb_borderRadius);` : ``}
 }
 ${elementSelector}::-webkit-scrollbar-thumb:hover {
 	background: var(--tsb_thumbHoverColor);
 }
+
 /* fallback - Firefox doesn't support '::-webkit-scrollbar' selectors */
 @supports (-moz-appearance:none) {
 	${elementSelector} {
@@ -108,20 +110,20 @@ export const DEFAULT_CSS_STYLESHEET = createScrollbarStyles("REPLACEME").replace
 );
 
 export class Scrollbar<T extends HTMLElement = HTMLElement> {
-	private tsbId = ``;
-	private styleId = ``;
+	public stylesheetId = ``;
+	public tsbId = ``;
 	private scrollTop = 0;
 	private scrollLeft = 0;
 	private prevScrollDetails: null | Partial<ScrollbarScrollDetails> = null;
-	private prevThresholdsReached: null | Partial<ScrollbarThresholdsReached> =
-		null;
+	private prevThresholdsReached: null | Partial<ScrollbarThresholdsReached> = null;
 
 	constructor(
 		public container: T,
 		public options: ScrollbarOptions = {},
 	) {
-		this.tsbId = `_scrollbar_${crypto.randomUUID().slice(0, 8)}`;
-		this.styleId = `_scrollbar_style_${crypto.randomUUID().slice(0, 8)}`;
+		const rnd = crypto.randomUUID().slice(0, 8);
+		this.tsbId = `tsb_scrollbar_${rnd}`;
+		this.stylesheetId = `tsb_scrollbar_style_${rnd}`;
 		this.init();
 	}
 
@@ -135,21 +137,27 @@ export class Scrollbar<T extends HTMLElement = HTMLElement> {
 	destroy = () => {
 		this.removeStyleSheet();
 		this.removeEventListeners();
+		this.container.style.overflow = "initial";
+		delete this.container.dataset["tsbId"];
 	};
 
 	private addStyleSheet = () => {
-		const alreadyInjected = !!document.getElementById(this.styleId);
+		const alreadyInjected = !!document.getElementById(this.stylesheetId);
 		if (alreadyInjected) {
 			this.removeStyleSheet();
 		}
 		const css = document.createElement("style");
-		css.id = this.styleId;
-		css.appendChild(document.createTextNode(createScrollbarStyles(this.tsbId, this.options.styles)));
-		document.head.appendChild(css);
+		css.id = this.stylesheetId;
+		const applyToAll = this.container === document.body;
+		css.appendChild(document.createTextNode(createScrollbarStyles(applyToAll ? null : this.tsbId, {
+			...DEFAULT_STYLES,
+			...this.options.styles,
+		})));
+		document.head.prepend(css);
 	};
 
 	private removeStyleSheet = () => {
-		const stylesheet = document.getElementById(this.styleId);
+		const stylesheet = document.getElementById(this.stylesheetId);
 		if (!stylesheet) {
 			return;
 		}
@@ -164,8 +172,8 @@ export class Scrollbar<T extends HTMLElement = HTMLElement> {
 		this.container.removeEventListener("scroll", this.onScroll);
 	};
 
+	// @todo
 	private onClick = () => {
-		// @todo
 		console.log("Not yet implemented - Scrollbar::onClick()");
 	};
 

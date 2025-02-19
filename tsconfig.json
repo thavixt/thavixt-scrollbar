@@ -3,7 +3,7 @@
 	"references": [
 		{ "path": "./packages/core/package.json" },
 		{ "path": "./packages/react/package.json" },
-		{ "path": "./packages/demo-react/package.json" }
+		{ "path": "./packages/website/package.json" }
 	],
 	"exclude": [""]
 }

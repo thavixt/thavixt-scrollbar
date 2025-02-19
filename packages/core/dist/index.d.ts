@@ -22,8 +22,8 @@ export declare const DEFAULT_CSS_STYLESHEET: string;
 export declare class Scrollbar<T extends HTMLElement = HTMLElement> {
     container: T;
     options: ScrollbarOptions;
-    private tsbId;
-    private styleId;
+    stylesheetId: string;
+    tsbId: string;
     private scrollTop;
     private scrollLeft;
     private prevScrollDetails;

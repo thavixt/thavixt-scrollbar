@@ -4,7 +4,7 @@ const DEFAULT_THUMB_HOVER_COLOR = "#888899";
 const DEFAULT_THUMB_HOVER_COLOR_DARK = "#ccccdd";
 const DEFAULT_TRACK_COLOR = "transparent";
 const DEFAULT_TRACK_COLOR_DARK = "transparent";
-const DEFAULT_TRACK_SIZE = 6;
+const DEFAULT_TRACK_SIZE = 8;
 const DEFAULT_TRACK_BORDER_RADIUS = 8;
 export const DEFAULT_STYLES = {
     width: DEFAULT_TRACK_SIZE,
@@ -18,10 +18,10 @@ export const DEFAULT_STYLES = {
     trackColorDark: DEFAULT_TRACK_COLOR_DARK,
 };
 const createScrollbarStyles = (id, styles = {}) => {
-    var _a, _b, _c, _d, _e, _f, _g, _h;
-    const elementSelector = id ? `[data-tsb-id="${id}"]` : `:root`;
-    const scopedVariables = `${elementSelector} {
-	/* Variables */
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+    const elementSelector = id ? `[data-tsb-id="${id}"]` : `*`;
+    const scopedVariables = `/* Variables */
+${elementSelector} {
 	--tsb_width: ${(_a = styles.width) !== null && _a !== void 0 ? _a : DEFAULT_TRACK_SIZE}px;
 	--tsb_height: ${(_b = styles.height) !== null && _b !== void 0 ? _b : DEFAULT_TRACK_SIZE}px;
 	--tsb_trackColor: ${`light-dark(${(_c = styles.trackColor) !== null && _c !== void 0 ? _c : DEFAULT_TRACK_COLOR}, ${(_d = styles.trackColorDark) !== null && _d !== void 0 ? _d : DEFAULT_TRACK_COLOR_DARK})`};
@@ -29,36 +29,39 @@ const createScrollbarStyles = (id, styles = {}) => {
 	--tsb_thumbHoverColor: ${`light-dark(${(_g = styles.thumbHoverColor) !== null && _g !== void 0 ? _g : DEFAULT_THUMB_HOVER_COLOR}, ${(_h = styles.thumbHoverColorDark) !== null && _h !== void 0 ? _h : DEFAULT_THUMB_HOVER_COLOR_DARK})`};
 	--tsb_borderRadius: ${styles.borderRadius}px;
 }`;
-    // Apply styles globally
-    if (!id) {
-        return `${scopedVariables}`;
-    }
     const scopedStyles = `${scopedVariables}
-/* more specific selectors allowing for more customization */ 
+/* scrollbar size */
 ${elementSelector}::-webkit-scrollbar {
 	width: var(--tsb_width);
 	height: var(--tsb_height);
 }
+
+/* scrollbar track style */
 ${elementSelector}::-webkit-scrollbar-track {
 	background: var(--tsb_trackColor);
 	border-radius: var(--tsb_borderRadius);
 }
-${elementSelector}::-webkit-scrollbar-vertical {
-	/* vertical scrollbar styles */
-}
-${elementSelector}::-webkit-scrollbar-horizontal {
-	/* horizontal scrollbar styles */
-}
+
+/* vertical scrollbar track style */
+${elementSelector}::-webkit-scrollbar-vertical {}
+
+/* horizontal scrollbar track style */
+${elementSelector}::-webkit-scrollbar-horizontal {}
+
+/* scrollbar track corner style - where horizontal and vertical tracks meet */
 ${elementSelector}::-webkit-scrollbar-corner {
-	background: transparent;
+	${((_j = styles.borderRadius) !== null && _j !== void 0 ? _j : DEFAULT_TRACK_BORDER_RADIUS) > 0 ? `background: transparent;` : `background: var(--tsb_trackColor);`}
 }
+
+/* scrollbar thumb styles */
 ${elementSelector}::-webkit-scrollbar-thumb {
 	background: var(--tsb_thumbColor);
-	border-radius: var(--tsb_borderRadius);
+	${styles.borderRadius ? `border-radius: var(--tsb_borderRadius);` : ``}
 }
 ${elementSelector}::-webkit-scrollbar-thumb:hover {
 	background: var(--tsb_thumbHoverColor);
 }
+
 /* fallback - Firefox doesn't support '::-webkit-scrollbar' selectors */
 @supports (-moz-appearance:none) {
 	${elementSelector} {
@@ -72,8 +75,8 @@ export class Scrollbar {
     constructor(container, options = {}) {
         this.container = container;
         this.options = options;
+        this.stylesheetId = ``;
         this.tsbId = ``;
-        this.styleId = ``;
         this.scrollTop = 0;
         this.scrollLeft = 0;
         this.prevScrollDetails = null;
@@ -87,19 +90,22 @@ export class Scrollbar {
         this.destroy = () => {
             this.removeStyleSheet();
             this.removeEventListeners();
+            this.container.style.overflow = "initial";
+            delete this.container.dataset["tsbId"];
         };
         this.addStyleSheet = () => {
-            const alreadyInjected = !!document.getElementById(this.styleId);
+            const alreadyInjected = !!document.getElementById(this.stylesheetId);
             if (alreadyInjected) {
                 this.removeStyleSheet();
             }
             const css = document.createElement("style");
-            css.id = this.styleId;
-            css.appendChild(document.createTextNode(createScrollbarStyles(this.tsbId, this.options.styles)));
-            document.head.appendChild(css);
+            css.id = this.stylesheetId;
+            const applyToAll = this.container === document.body;
+            css.appendChild(document.createTextNode(createScrollbarStyles(applyToAll ? null : this.tsbId, Object.assign(Object.assign({}, DEFAULT_STYLES), this.options.styles))));
+            document.head.prepend(css);
         };
         this.removeStyleSheet = () => {
-            const stylesheet = document.getElementById(this.styleId);
+            const stylesheet = document.getElementById(this.stylesheetId);
             if (!stylesheet) {
                 return;
             }
@@ -111,8 +117,8 @@ export class Scrollbar {
         this.removeEventListeners = () => {
             this.container.removeEventListener("scroll", this.onScroll);
         };
+        // @todo
         this.onClick = () => {
-            // @todo
             console.log("Not yet implemented - Scrollbar::onClick()");
         };
         this.onScroll = (e) => {
@@ -158,8 +164,9 @@ export class Scrollbar {
                 this.prevScrollDetails = scrollValues;
             }
         };
-        this.tsbId = `_scrollbar_${crypto.randomUUID().slice(0, 8)}`;
-        this.styleId = `_scrollbar_style_${crypto.randomUUID().slice(0, 8)}`;
+        const rnd = crypto.randomUUID().slice(0, 8);
+        this.tsbId = `tsb_scrollbar_${rnd}`;
+        this.stylesheetId = `tsb_scrollbar_style_${rnd}`;
         this.init();
     }
 }

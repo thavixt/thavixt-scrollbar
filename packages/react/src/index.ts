@@ -2,30 +2,47 @@ import {
 	Scrollbar,
 	ScrollbarOptions,
 } from "thavixt-scrollbar-core";
-import { useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 
+export function useScrollbar(
+	options: ScrollbarOptions, applyToBody: boolean,
+): undefined;
 export function useScrollbar<T extends HTMLElement = HTMLElement>(
-	options: ScrollbarOptions,
-) {
+	options: ScrollbarOptions, applyToBody?: boolean,
+): RefObject<T> | undefined;
+export function useScrollbar<T extends HTMLElement = HTMLElement>(
+	options: ScrollbarOptions, applyToBody?: boolean,
+): RefObject<T> | undefined {
 	const ref = useRef<T>(null);
 	const scrollbarRef = useRef<Scrollbar<T> | null>(null);
 
 	useEffect(() => {
-		if (!ref.current) {
+		if (applyToBody) {
+			ref.current = null;
+		}
+		return;
+	}, [applyToBody]);
+
+	useEffect(() => {
+		if (!(ref.current || applyToBody)) {
 			return;
 		}
-		scrollbarRef.current = new Scrollbar(ref.current, options);
-
+		scrollbarRef.current = new Scrollbar<T>(
+			applyToBody ? document.body as T : (ref as RefObject<T>).current, options,
+		);
 		return () => {
 			if (scrollbarRef.current) {
 				scrollbarRef.current.destroy();
-				scrollbarRef.current = null;
 			}
+			scrollbarRef.current = null;
 		};
-		// the `options` dep should be stable?
-	}, [options, ref]);
+	}, [applyToBody, options]);
 
-	return ref;
+	if (applyToBody) {
+		return undefined;
+	}
+
+	return ref as RefObject<T>;
 }
 
 export {

@@ -33,12 +33,12 @@
     "lerna:build": "npx lerna run build",
     "lerna:publish": "npx lerna publish --no-private --force-publish",
     "lint": "eslint --fix",
-    "react-demo:deploy": "vercel packages/demo-react",
-    "react-demo:dev": "npm run dev -w thavixt-scrollbar-demo-react",
     "react:build": "npm run build -w thavixt-scrollbar-react",
     "react:dev": "npm run dev -w thavixt-scrollbar-react",
     "tdd": "vitest",
-    "test": "vitest --run"
+    "test": "vitest --run",
+    "website:deploy": "vercel packages/website",
+    "website:dev": "npm run dev -w thavixt-scrollbar-website"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",

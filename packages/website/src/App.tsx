@@ -1,10 +1,10 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import css from 'react-syntax-highlighter/dist/esm/languages/prism/css';
 import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
 import darkTheme from 'react-syntax-highlighter/dist/esm/styles/prism/material-dark';
 import lightTheme from 'react-syntax-highlighter/dist/esm/styles/prism/material-light';
-import { DEFAULT_CSS_STYLESHEET, DEFAULT_STYLES, useScrollbar, ScrollbarStyles } from "thavixt-scrollbar-react";
+import { DEFAULT_CSS_STYLESHEET, DEFAULT_STYLES, useScrollbar, ScrollbarStyles, ScrollbarThresholdsReached } from "thavixt-scrollbar-react";
 import { useColorScheme } from "./useColorScheme";
 
 SyntaxHighlighter.registerLanguage('css', css);
@@ -17,20 +17,29 @@ const codeCustomCSS = `div[data-tsb-id="myElement"]::-webkit-scrollbar-track {
   background: pink;
   border-radius: 6px;
 }`
-const globalCode = `// TODO`;
+const globalCode = `/**
+* If you provide the second argument 'applyToBody' as true,
+* all scrollbars on the page will be affected.
+*
+* When doing this, the 'useScrollbar' hook will *not* have a return value.
+* Since the styling is done with CSS, all elements created subsequently
+* will have the scrollbar styles applied.
+**/
+useScrollbar({ styles, onScrollToEnd }, true);
+`;
 
 const numericScrollbarStyles = ["width", "height", "borderRadius"];
 
 const demoStyles: ScrollbarStyles = {
 	...DEFAULT_STYLES,
-	// width: 10,
-	// height: 10,
-	thumbColor: '#4949bc',
-	thumbColorDark: '#2bda6e',
-	thumbHoverColor: '#f09833',
+	width: 10,
+	height: 10,
+	thumbColor: '#ee6820',
+	thumbColorDark: '#30d94c',
+	thumbHoverColor: '#f033d7',
 	thumbHoverColorDark: '#eb6060',
-	// trackColor: '#aeadad',
-	// trackColorDark: '#ddd4d4',
+	trackColor: '#434242',
+	trackColorDark: '#ddd4d4',
 }
 
 const styleDescriptions: Record<keyof ScrollbarStyles, string> = {
@@ -48,32 +57,34 @@ const styleDescriptions: Record<keyof ScrollbarStyles, string> = {
 function App() {
 	const [placeholderCount, setPlaceholderCount] = useState(10);
 	const [styles, setStyles] = useState<ScrollbarStyles>(demoStyles);
-	const { colorScheme, firstRender, toggle: toggleColorScheme } = useColorScheme('thavixt-scrollbar-demo');
+	const { colorScheme, toggle: toggleColorScheme } = useColorScheme('thavixt-scrollbar-demo');
 	const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+	const [applyToBody, setApplyToBody] = useState(false);
+	const [logs, setLogs] = useState<string[]>([]);
+	const logContainerRef = useRef<HTMLDivElement>(null);
 
 	const codeReactHook = useMemo(() => `import { useScrollbar } from "thavixt-scrollbar-react";
 
 function MyCompontent() {
-		const ref = useRef(null);
+	const ref = useRef(null);
 
-		useScrollbar(ref, {
-			width: ${styles.width},
-			height: ${styles.height},
-			thumbColor: '${styles.thumbColor}',
-			thumbColorDark: '${styles.thumbColorDark}',
-			thumbHoverColor: '${styles.thumbHoverColor}',
-			thumbHoverColorDark: '${styles.thumbHoverColorDark}',
-			trackColor: '${styles.trackColor}',
-			trackColorDark: '${styles.trackColorDark}',
-		});
+	useScrollbar(ref, {
+		width: ${styles.width},
+		height: ${styles.height},
+		thumbColor: '${styles.thumbColor}',
+		thumbColorDark: '${styles.thumbColorDark}',
+		thumbHoverColor: '${styles.thumbHoverColor}',
+		thumbHoverColorDark: '${styles.thumbHoverColorDark}',
+		trackColor: '${styles.trackColor}',
+		trackColorDark: '${styles.trackColorDark}',
+	});
 
-		return (
-			<div ref={ref} className='h-[300px] overflow-auto whitespace-pre'>
-				Lorem ipsum dolor sit amet...x${placeholderCount}
-			</div>
-		)
-	}
-	`, [
+	return (
+		<div ref={ref} className='h-[300px] overflow-auto whitespace-pre'>
+			Lorem ipsum dolor sit amet...x${placeholderCount}
+		</div>
+	)
+}`, [
 		placeholderCount,
 		styles.height,
 		styles.thumbColor,
@@ -85,16 +96,26 @@ function MyCompontent() {
 		styles.width,
 	]);
 
-	const reset = useCallback(() => {
+	const resetDemoToDefaults = useCallback(() => {
 		setStyles(demoStyles);
 	}, []);
 
-	// with react hook package
-	const ref2 = useScrollbar<HTMLDivElement>({ styles });
+	const resetToLibDefaults = useCallback(() => {
+		setStyles(DEFAULT_STYLES);
+	}, []);
 
-	if (firstRender) {
-		return null;
-	}
+	const onScrollToEnd = useCallback((reached: ScrollbarThresholdsReached) => {
+		const log = `${new Date().toJSON()}: Reached ${Object.keys(reached).join(', ')}`;
+		setLogs(prev => ([...prev, log]));
+	}, []);
+
+	useEffect(() => {
+		if (logContainerRef.current) {
+			logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
+		}
+	}, [logs.length])
+
+	const ref = useScrollbar({ styles, onScrollToEnd }, applyToBody);
 
 	return (
 		<div className="mx-auto w-full max-w-2xl lg:max-w-6xl flex flex-col lg:grid lg:grid-cols-2 gap-x-8 gap-y-16 p-8 pb-24">
@@ -111,6 +132,7 @@ function MyCompontent() {
 				</b>
 				<p>made by <a href="https://github.com/thavixt" target="_blank">thavixt@github</a></p>
 			</div>
+
 			<div className="flex flex-col gap-4 highlight">
 				<b>Installation:</b>
 				<div>
@@ -126,6 +148,10 @@ function MyCompontent() {
 						<NPMBadge packageName="thavixt-scrollbar-react" />
 						<code>npm i thavixt-scrollbar-react</code>
 					</div>
+				</div>
+				<div className="text-sm flex flex-col">
+					<p>Notes:</p>
+					<p>All packages include <code>.d.ts</code> files for seamless usage with TypeScript.</p>
 				</div>
 			</div>
 
@@ -181,7 +207,7 @@ function MyCompontent() {
 														) ? (
 															<input
 																type="number"
-																min="1"
+																min="0"
 																max="100"
 																id={key}
 																name={key}
@@ -222,8 +248,9 @@ function MyCompontent() {
 					</li>
 				</ul>
 
-				<div className="w-full flex justify-center">
-					<button type="button" onClick={reset}>Reset styles to demo defaults</button>
+				<div className="w-full flex flex-col justify-center items-center gap-2">
+					<button type="button" onClick={resetDemoToDefaults}>Reset styles to demo defaults</button>
+					<button type="button" onClick={resetToLibDefaults}>Reset styles to library defaults</button>
 				</div>
 
 			</div>
@@ -231,7 +258,7 @@ function MyCompontent() {
 			<div className="flex flex-col gap-2">
 				<b>Demo: (change the styles in the table)</b>
 				<details>
-					<summary>Code</summary>
+					<summary>React example code:</summary>
 					<SyntaxHighlighter
 						language="tsx"
 						style={theme}
@@ -241,11 +268,13 @@ function MyCompontent() {
 					</SyntaxHighlighter>
 				</details>
 				<div
-					ref={ref2}
+					ref={ref}
 					className="h-[300px] w-full max-w-[700px] overflow-auto whitespace-pre"
 				>
 					{getText(placeholderCount * 3)}
 				</div>
+
+				<p>Check the dev console <code>F12</code> to see logs.</p>
 
 				<div className="flex flex-col gap-2 items-center justify-center">
 					<button
@@ -272,7 +301,11 @@ function MyCompontent() {
 
 			<div className="flex flex-col gap-2">
 				<b>Apply globally:</b>
-				<p>If you want to change <b>every scrollbar</b> on the page:</p>
+				<div className="flex gap-2 items-center justify-start">
+					<label htmlFor="body">apply to every scrollbar on this page:</label>
+					<input type="checkbox" name="body" id="body" onChange={e => setApplyToBody(e.target.checked)} defaultChecked={applyToBody} />
+				</div>
+				<p>If you want to change <b>every scrollbar</b> on the page</p>
 				<SyntaxHighlighter
 					language="tsx"
 					style={theme}
