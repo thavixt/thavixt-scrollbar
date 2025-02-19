@@ -1,7 +1,7 @@
 {
   "name": "thavixt-scrollbar-react",
   "description": "React hook to customize the scrollbars with a custom one on your websites",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "private": false,
   "publishConfig": {
     "access": "public",
@@ -39,7 +39,7 @@
     "prebuild": "vitest --run . && eslint ."
   },
   "dependencies": {
-    "thavixt-scrollbar-core": "^1.4.1"
+    "thavixt-scrollbar-core": "^1.5.0"
   },
   "peerDependencies": {
     "react": "^19.0.0",
