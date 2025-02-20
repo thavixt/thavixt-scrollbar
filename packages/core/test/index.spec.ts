@@ -1,10 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { Scrollbar, ScrollbarOptions } from "../src";
 
-describe("myPackage", () => {
+describe("scrollbar-core", () => {
 
 	describe('init', () => {
-
 		it("should apply to provided element", () => {
 			const container = document.createElement("div");
 			container.id = "mockDivId";

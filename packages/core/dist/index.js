@@ -169,9 +169,10 @@ export class Scrollbar {
             this.scrollLeft = left;
             const thresholdsReachedChanged = JSON.stringify(thresholdsReached) !==
                 JSON.stringify(this.prevThresholdsReached);
-            if (thresholdsReachedChanged && Object.keys(thresholdsReached).length) {
+            const directions = Object.keys(thresholdsReached);
+            if (thresholdsReachedChanged && directions.length) {
                 if (this.prevThresholdsReached && this.options.onScrollToEnd) {
-                    this.options.onScrollToEnd(thresholdsReached);
+                    this.options.onScrollToEnd(directions);
                 }
                 this.prevThresholdsReached = thresholdsReached;
                 this.container.dataset.animating = Object.keys(thresholdsReached).join(",");

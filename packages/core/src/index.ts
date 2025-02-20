@@ -1,36 +1,37 @@
 export type ScrollDirection = "top" | "bottom" | "left" | "right";
 export type ScrollbarScrollDetails = Record<ScrollDirection, number>;
-export type ScrollbarThresholdsReached = Partial<
+
+type ScrollbarThresholdsReached = Partial<
 	Record<ScrollDirection, boolean>
 >;
 
-export type ScrollbarOptions = Partial<{
+export type ScrollbarOptions = {
 	// Callback on scroll
 	onScroll?: (details: ScrollbarScrollDetails) => void;
 	// Callback when the element is scrolled to it's min/max width/height
-	onScrollToEnd?: (thresholds: ScrollbarThresholdsReached) => void;
+	onScrollToEnd?: (directions: ScrollDirection[]) => void;
 	// Styles to apply to the element's vertical/horizontal scrollbar
 	styles?: ScrollbarStyles;
-}>;
+};
 
-export type ScrollbarStyles = Partial<{
+export type ScrollbarStyles = {
 	// Border radius
-	borderRadius: number;
+	borderRadius?: number;
 
 	// Dimensions
-	width: number;
-	height: number;
+	width?: number;
+	height?: number;
 
 	// Light theme colors
-	thumbColor: string;
-	thumbHoverColor: string;
-	trackColor: string;
+	thumbColor?: string;
+	thumbHoverColor?: string;
+	trackColor?: string;
 	
 	// Dark theme colors
-	thumbColorDark: string;
-	thumbHoverColorDark: string;
-	trackColorDark: string;
-}>;
+	thumbColorDark?: string;
+	thumbHoverColorDark?: string;
+	trackColorDark?: string;
+};
 
 const DEFAULT_THUMB_COLOR = "#aaaabb";
 const DEFAULT_THUMB_COLOR_DARK = "#9999aa";
@@ -240,9 +241,10 @@ export class Scrollbar<T extends HTMLElement = HTMLElement> {
 		const thresholdsReachedChanged =
 			JSON.stringify(thresholdsReached) !==
 			JSON.stringify(this.prevThresholdsReached);
-		if (thresholdsReachedChanged && Object.keys(thresholdsReached).length) {
+		const directions = Object.keys(thresholdsReached) as ScrollDirection[];
+		if (thresholdsReachedChanged && directions.length) {
 			if (this.prevThresholdsReached && this.options.onScrollToEnd) {
-				this.options.onScrollToEnd(thresholdsReached);
+				this.options.onScrollToEnd(directions);
 			}
 			this.prevThresholdsReached = thresholdsReached;
 			this.container.dataset.animating = (

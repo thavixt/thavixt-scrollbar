@@ -1,45 +1,41 @@
 import {
 	Scrollbar,
-	ScrollbarOptions,
+	ScrollbarOptions as CoreScrollbarOptions,
 } from "thavixt-scrollbar-core";
 import { RefObject, useEffect, useRef } from "react";
 
-export function useScrollbar(
-	options: ScrollbarOptions, applyToBody: boolean,
-): undefined;
-export function useScrollbar<T extends HTMLElement = HTMLElement>(
-	options: ScrollbarOptions, applyToBody?: boolean,
-): RefObject<T> | undefined;
-export function useScrollbar<T extends HTMLElement = HTMLElement>(
-	options: ScrollbarOptions, applyToBody?: boolean,
-): RefObject<T> | undefined {
-	const ref = useRef<T>(null);
+interface ScrollbarOptions extends CoreScrollbarOptions {
+	body?: boolean;
+}
+
+export function useScrollbar<T extends HTMLElement = HTMLElement>(options?: ScrollbarOptions): RefObject<T> {
+	const ref = useRef<T | null>(null);
+	const bodyRef = useRef(document.body);
 	const scrollbarRef = useRef<Scrollbar<T> | null>(null);
 
 	useEffect(() => {
-		if (applyToBody) {
+		if (options?.body || ref) {
 			ref.current = null;
 		}
 		return;
-	}, [applyToBody]);
+	}, [options?.body]);
 
 	useEffect(() => {
-		if (!(ref.current || applyToBody)) {
+		if (!(ref.current || options?.body)) {
 			return;
 		}
-		scrollbarRef.current = new Scrollbar<T>(
-			applyToBody ? document.body as T : (ref as RefObject<T>).current, options,
-		);
+		const subject = (options?.body ? document.body : ref.current) as T;
+		scrollbarRef.current = new Scrollbar<T>(subject, options);
 		return () => {
 			if (scrollbarRef.current) {
 				scrollbarRef.current.destroy();
 			}
 			scrollbarRef.current = null;
 		};
-	}, [applyToBody, options]);
+	}, [options]);
 
-	if (applyToBody) {
-		return undefined;
+	if (options?.body) {
+		return bodyRef as RefObject<T>;
 	}
 
 	return ref as RefObject<T>;
@@ -50,12 +46,11 @@ export {
 	DEFAULT_STYLES,
 } from 'thavixt-scrollbar-core';
 export type {
+	Scrollbar as ScrollbarCore,
 	ScrollbarStyles,
 	ScrollDirection,
-	Scrollbar as ScrollbarCore,
 	ScrollbarOptions,
 	ScrollbarScrollDetails,
-	ScrollbarThresholdsReached,
 } from 'thavixt-scrollbar-core'
 
 export default useScrollbar;

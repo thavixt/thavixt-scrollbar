@@ -1,8 +1,10 @@
 # thavixt-scrollbar-core
 
-![npm package][npm-img]
+![npm package](https://img.shields.io/npm/v/thavixt-scrollbar-core)
+![NPM Downloads](https://img.shields.io/npm/dm/thavixt-scrollbar-core)
+![last update](https://img.shields.io/npm/last-update/thavixt-scrollbar-core)
 
-A basic Javascript package to customize scrollbars of containers in your website.
+A basic Javascript package to customize scrollbars on your website.
 
 # Demo
 
@@ -14,28 +16,15 @@ A basic Javascript package to customize scrollbars of containers in your website
 npm install thavixt-scrollbar-core
 ```
 
-## Interface
+## Example
 
 ```ts
-class ThavixtScrollbar {
-	constructor(
-		container: HTMLDivElement,
-		options?: Partial<ThavixtScrollbarOptions>,
-	);
-	destroy: () => void;
-	container: HTMLDivElement;
-	options: Partial<ThavixtScrollbarOptions>;
-}
-```
-
-## Usage
-
-```ts
-// Example usage:
-import { ThavixtScrollbar } from "thavixt-scrollbar";
+import { ThavixtScrollbar } from "thavixt-scrollbar-core";
 
 new ThavixtScrollbar("id_of_scrollable_html_element", {
-	onScrollEnd: () => console.log("you reached a side!"),
+	onScrollToEnd: (directions) => {
+		console.log(`you reached the ${directions.join(',')} end`);
+	},
 	styles: {
 		thumbColor: "#999",
 		thumbHoverColor: "#ccc",
@@ -46,26 +35,22 @@ new ThavixtScrollbar("id_of_scrollable_html_element", {
 
 ## API
 
-### ThavixtScrollbar(container, options?)
+### new ThavixtScrollbar(container, options?)
 
 #### container
 
 Type: `HTMLDivElement`
 
-an HTML element to customize the scrollbar of
-
 #### options
 
 Type: `object`
-
-Customize the styles and callbacks of the scrollbar
 
 ```ts
 type ThavixtScrollbarOptions = Partial<{
 	// Callback on scroll
 	onScroll?: (details: ScrollbarScrollDetails) => void;
 	// Callback when the element is scrolled to it's min/max width/height
-	onScrollToEnd?: (thresholds: ScrollbarThresholdsReached) => void;
+	onScrollToEnd?: (directions: ScrollDirection[]) => void;
 	// Styles to apply to the element's vertical/horizontal scrollbar
 	styles?: ScrollbarStyles;
 }>;
@@ -85,7 +70,4 @@ interface ScrollbarStyles {
 
 type ScrollDirection = "top" | "bottom" | "left" | "right";
 type ScrollbarScrollDetails = Record<ScrollDirection, number>;
-type ScrollbarThresholdsReached = Partial<Record<ScrollDirection, boolean>>;
 ```
-
-[npm-img]: https://img.shields.io/npm/v/thavixt-scrollbar-core

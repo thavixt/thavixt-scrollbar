@@ -4,9 +4,9 @@ import css from 'react-syntax-highlighter/dist/esm/languages/prism/css';
 import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
 import darkTheme from 'react-syntax-highlighter/dist/esm/styles/prism/material-dark';
 import lightTheme from 'react-syntax-highlighter/dist/esm/styles/prism/material-light';
-import { DEFAULT_CSS_STYLESHEET, DEFAULT_STYLES, useScrollbar, ScrollbarStyles, ScrollbarThresholdsReached } from "thavixt-scrollbar-react";
+import { DEFAULT_CSS_STYLESHEET, DEFAULT_STYLES, useScrollbar, ScrollbarStyles, ScrollDirection } from "thavixt-scrollbar-react";
 import { useColorScheme } from "./useColorScheme";
-import { codeCustomCSS, sytaxHighlighterStyle, demoGradientStyles, demoStyles, getText, globalCode, numericScrollbarStyles, styleDescriptions } from "./components/constants";
+import { codeCustomCSS, sytaxHighlighterStyle, demoGradientStyles, demoStyles, getText, globalCode, numericScrollbarStyles, styleDescriptions } from "./constants";
 import { CopyContentToClipboardButton } from "./components/CopyContentToClipboardButton";
 import { NPMBadge } from "./components/NPMBadge";
 
@@ -58,14 +58,14 @@ function MyCompontent() {
 		setStyles(styles);
 	}, []);
 
-	const onScrollToEnd = useCallback((reached: ScrollbarThresholdsReached) => {
-		console.log(`[thavixt-scrollbar-demo] ${new Date().toJSON()} ${Object.keys(reached).join(', ')}`);
+	const onScrollToEnd = useCallback((directions: ScrollDirection[]) => {
+		console.log(`[thavixt-scrollbar-demo] ${new Date().toJSON()} ${directions.join(',')}`);
 	}, []);
 
-	const ref = useScrollbar({ styles, onScrollToEnd }, applyToBody);
+	const ref = useScrollbar<HTMLDivElement>({ body: applyToBody, onScrollToEnd, styles });
 
 	return (
-		<div className="mx-auto w-full max-w-2xl lg:max-w-7xl flex flex-col xl:grid xl:grid-cols-2 gap-8 gap-y-32 pt-8 pb-24 px-8 items-center">
+		<div className="mx-auto w-full min-w-lg max-w-2xl lg:max-w-7xl lg:grid lg:grid-cols-2 space-x-8 space-y-16 pt-8 pb-16 px-8">
 			<div className="col-span-2">
 				<h1>thavixt-scrollbar</h1>
 			</div>
@@ -77,11 +77,6 @@ function MyCompontent() {
 						Check out the project on Github
 					</a>
 				</b>
-				<p className="pt-16">
-					<small>
-						made by <a href="https://github.com/thavixt" target="_blank">thavixt@github</a>
-					</small>
-				</p>
 			</div>
 
 			<div className="flex flex-col gap-4 highlight">
@@ -102,7 +97,11 @@ function MyCompontent() {
 				</div>
 				<div className="text-sm flex flex-col">
 					<p>Notes:</p>
-					<p>All packages include <code>.d.ts</code> files for seamless usage with TypeScript.</p>
+					<ul className="list-disc list-inside">
+						<li>
+							<p className="inline">all packages include <code>.d.ts</code> files for seamless usage with TypeScript.</p>
+						</li>
+					</ul>
 				</div>
 			</div>
 
@@ -130,8 +129,14 @@ function MyCompontent() {
 					<li>
 						Style customization: (change the values to play with the demo)
 						<div className="w-full overflow-x-auto">
+							<div className="w-full flex justify-center items-center gap-2 pt-2">
+								<span>quick apply:</span>
+								<button type="button" onClick={() => setDemoStyles(DEFAULT_STYLES)}>library defaults</button>
+								<button type="button" onClick={() => setDemoStyles(demoStyles)}>demo colors</button>
+								<button type="button" onClick={() => setDemoStyles(demoGradientStyles)}>gradients example</button>
+							</div>
 							<div className="pl-6">
-								<table className="table-auto w-full">
+								<table className="table-fixed w-full">
 									<thead>
 										<tr>
 											<th>key</th>
@@ -202,18 +207,12 @@ function MyCompontent() {
 						</div>
 					</li>
 				</ul>
-
-				<div className="w-full flex justify-center items-center gap-2">
-					<button type="button" onClick={() => setDemoStyles(DEFAULT_STYLES)}>Set to library defaults</button>
-					<button type="button" onClick={() => setDemoStyles(demoStyles)}>Set to demo defaults</button>
-					<button type="button" onClick={() => setDemoStyles(demoGradientStyles)}>Show some gradients</button>
-				</div>
 			</div>
 
 			<div className="flex flex-col gap-2">
 				<b>Demo: (change the styles in the table)</b>
 				<details>
-					<summary>React example code:</summary>
+					<summary>React code example:</summary>
 					<SyntaxHighlighter
 						language="tsx"
 						style={theme}
@@ -224,7 +223,7 @@ function MyCompontent() {
 				</details>
 				<div
 					ref={ref}
-					className="h-[300px] w-[600px] overflow-auto whitespace-pre"
+					className="h-[300px] w-full overflow-auto whitespace-pre"
 				>
 					{getText(placeholderCount * 3)}
 				</div>
@@ -249,32 +248,26 @@ function MyCompontent() {
 			</div>
 
 			<div className="flex flex-col gap-2 highlight">
-				<b>Apply globally:</b>
+				<b>Apply styles globally</b>
 				<div className="flex gap-2 items-center justify-start">
-					<label htmlFor="body">apply to every scrollbar on this page:</label>
+					<label htmlFor="body">customize every scrollbar on the page:</label>
 					<input type="checkbox" name="body" id="body" onChange={e => setApplyToBody(e.target.checked)} defaultChecked={applyToBody} />
 				</div>
-				<p>If you want to change <b>every scrollbar</b> on the page</p>
-				<SyntaxHighlighter
-					language="tsx"
-					style={theme}
-					customStyle={sytaxHighlighterStyle}
-				>
-					{globalCode}
-				</SyntaxHighlighter>
+				<details>
+					<summary>React code example:</summary>
+					<SyntaxHighlighter
+						language="tsx"
+						style={theme}
+						customStyle={sytaxHighlighterStyle}
+					>
+						{globalCode}
+					</SyntaxHighlighter>
+				</details>
 			</div>
 
 			<div className="flex flex-col gap-2">
-				<b>Default stylesheet applied:</b>
-				<SyntaxHighlighter
-					language="css"
-					style={theme}
-					customStyle={sytaxHighlighterStyle}
-				>
-					{DEFAULT_CSS_STYLESHEET}
-				</SyntaxHighlighter>
 				<p className="inline">
-					Provide custom styles with CSS, like:
+					Provide custom styles with CSS:
 				</p>
 				<SyntaxHighlighter
 					language="css"
@@ -283,6 +276,16 @@ function MyCompontent() {
 				>
 					{codeCustomCSS}
 				</SyntaxHighlighter>
+				<details>
+					<summary>All appended (default) styles:</summary>
+					<SyntaxHighlighter
+						language="css"
+						style={theme}
+						customStyle={sytaxHighlighterStyle}
+					>
+						{DEFAULT_CSS_STYLESHEET}
+					</SyntaxHighlighter>
+				</details>
 			</div>
 
 		</div>

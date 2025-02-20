@@ -1,10 +1,12 @@
 # thavixt-scrollbar-core
 
-![npm package][npm-img]
+![npm package](https://img.shields.io/npm/v/thavixt-scrollbar-react)
+![NPM Downloads](https://img.shields.io/npm/dm/thavixt-scrollbar-react)
+![last update](https://img.shields.io/npm/last-update/thavixt-scrollbar-react)
 
-A basic Javascript package to customize scrollbars of containers in your website.
+A Typescript package for React to customize scrollbars on your website.
 
-# Demo
+## Demo
 
 [demo page](https://demo-thavixt-scrollbar-react.vercel.app/)
 
@@ -14,35 +16,40 @@ A basic Javascript package to customize scrollbars of containers in your website
 npm install thavixt-scrollbar-react
 ```
 
-## Interface
+## Example
 
 ```ts
-function useScrollbar<T extends HTMLElement>(
-	options: ThavixtScrollbarOptions,
-): void;
-```
-
-## Usage
-
-```ts
-// Example usage:
-import { ThavixtScrollbar } from 'thavixt-scrollbar';
+import { useScrollbar } from 'thavixt-scrollbar-react';
 
 function MyCompontent() {
-  const ref = useScrollbar<HTMLDivElement>({
-    onScrollEnd: () => console.log('you reached a side!'),
-    styles: {
-      thumbColor: '#999',
-      thumbHoverColor: '#ccc',
-      trackColor: 'transparent',
-    },
-  })
+	// use the provided hook to create a ref to the element you want to customize
+	const ref = useScrollbar<HTMLDivElement>({
+		onScrollToEnd: (directions) => {
+			console.log(`you reached the ${directions.join(',')} end`);
+		},
+		styles: {
+			thumbColor: '#999',
+			thumbHoverColor: '#ccc',
+			trackColor: 'transparent',
+		},
+	})
 
-  return (
-    <div ref={ref} className='h-[300px] overflow-auto whitespace-pre'>
-      my very long text that overflows
-    </div>
-  )
+	// to apply styles to *all* elements on your site, omit using the returned `ref`
+	/*
+	useScrollbar<HTMLDivElement>({
+		body: true,
+		styles: {
+			thumbColor: '#999',
+		},
+	})
+	*/
+
+	return (
+		<div ref={ref} className='h-[300px] overflow-auto whitespace-pre'>
+			my very long text that overflows
+		</div>
+	)
+}
 ```
 
 ## API
@@ -53,17 +60,17 @@ function MyCompontent() {
 
 Type: `object`
 
-Customize the styles and callbacks of the scrollbar
-
 ```ts
-type ThavixtScrollbarOptions = Partial<{
+type ThavixtScrollbarOptions = {
 	// Callback on scroll
 	onScroll?: (details: ScrollbarScrollDetails) => void;
 	// Callback when the element is scrolled to it's min/max width/height
-	onScrollToEnd?: (thresholds: ScrollbarThresholdsReached) => void;
+	onScrollToEnd?: (directions: ScrollDirection[]) => void;
 	// Styles to apply to the element's vertical/horizontal scrollbar
 	styles?: ScrollbarStyles;
-}>;
+	// Apply to all scrollbars on the page
+	body?: boolean;
+};
 
 interface ScrollbarStyles {
 	// Size in pixels
@@ -80,13 +87,10 @@ interface ScrollbarStyles {
 
 type ScrollDirection = "top" | "bottom" | "left" | "right";
 type ScrollbarScrollDetails = Record<ScrollDirection, number>;
-type ScrollbarThresholdsReached = Partial<Record<ScrollDirection, boolean>>;
 ```
 
 #### ref
 
-Type: `React.Ref<HTMLDivElement>`
+Type: `React.Ref<T>`
 
-`ref` of an HTML element to customize the scrollbar of
-
-[npm-img]: https://img.shields.io/npm/v/thavixt-scrollbar-react
+> In case of `options: { body: true }`, the returned `ref` always points to `document.body`. This `ref` should not be assigned to an element.
