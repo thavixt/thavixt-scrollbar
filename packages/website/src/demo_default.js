@@ -4,7 +4,7 @@ class ImportError extends Error { }
 
 (async () => {
   try {
-    const DefaultExport = await import(/* @vite-ignore */modulePath);
+    const {default: DefaultExport} = await import(/* @vite-ignore */modulePath);
     if (typeof DefaultExport === 'function') {
       console.log('✅ Importing default export from module from unpkg.com works')
     } else {
