@@ -9,7 +9,17 @@ import darkTheme from 'react-syntax-highlighter/dist/esm/styles/prism/material-d
 import lightTheme from 'react-syntax-highlighter/dist/esm/styles/prism/material-light';
 import { DEFAULT_CSS_STYLESHEET, DEFAULT_STYLES, useScrollbar, ScrollbarStyles, ScrollDirection } from "thavixt-scrollbar-react";
 
-import { codeCustomCSS, sytaxHighlighterStyle, demoGradientStyles, demoStyles, getText, globalCode, numericScrollbarStyles, styleDescriptions } from "./constants";
+import {
+	codeCustomCSS,
+	sytaxHighlighterStyle,
+	demoGradientStyles,
+	demoStyles,
+	getText,
+	globalCode,
+	numericScrollbarStyles,
+	styleDescriptions,
+	importUnpkgCoreCode,
+} from "./constants";
 import { CopyContentToClipboardButton } from "./components/CopyContentToClipboardButton";
 import { NPMBadge } from "./components/NPMBadge";
 import { useColorScheme } from "./useColorScheme";
@@ -74,31 +84,41 @@ function MyCompontent() {
 				<h1>thavixt-scrollbar</h1>
 			</div>
 
-			<div className="flex flex-col gap-2">
-				<p>Customize scrollbars on your websites!</p>
-				<b>
+			<div className="flex flex-col gap-8 highlight col-span-2">
+				<div className="flex gap-2 col-span-2">
+					<span>Customize scrollbars on your websites!</span>
 					<a href="https://github.com/thavixt/thavixt-scrollbar" target="_blank">
-						Check out the project on Github
+						Check out the project on Github here
 					</a>
-				</b>
-			</div>
+				</div>
 
-			<div className="flex flex-col gap-4 highlight">
-				<b>Installation:</b>
 				<div className="flex flex-col gap-2">
-					<em><b>core</b> package for use without a framework</em>
+					<span><b>react</b> package</span>
+					<NPMBadge packageName="thavixt-scrollbar-react" />
 					<div className="flex gap-2">
-						<NPMBadge packageName="thavixt-scrollbar-core" />
-						<code>npm i thavixt-scrollbar-core</code>
+						<code>$ npm i thavixt-scrollbar-react</code>
 					</div>
 				</div>
+
 				<div className="flex flex-col gap-2">
-					<em><b>react</b> package</em>
+					<span><b>core</b> package - <em>for use without a framework</em></span>
+					<NPMBadge packageName="thavixt-scrollbar-core" />
 					<div className="flex gap-2">
-						<NPMBadge packageName="thavixt-scrollbar-react" />
-						<code>npm i thavixt-scrollbar-react</code>
+						<code>$ npm i thavixt-scrollbar-core</code>
 					</div>
+					<div>
+						or import in your <code>.js</code> file on your website from
+						{' '}<a target="_blank" href="https://unpkg.com/thavixt-scrollbar-core/dist/index.js">unpkg</a>:
+					</div>
+					<SyntaxHighlighter
+						language="js"
+						style={theme}
+						customStyle={sytaxHighlighterStyle}
+					>
+						{importUnpkgCoreCode}
+					</SyntaxHighlighter>
 				</div>
+
 				<div className="text-sm flex flex-col">
 					<p>Notes:</p>
 					<ul>
@@ -178,24 +198,19 @@ function MyCompontent() {
 																id={key}
 																name={key}
 																value={styles[key]}
-																onChange={(e) =>
-																	setStyles((prev) => ({
-																		...prev,
-																		[key]: e.target
-																			.value,
-																	}))
-																}
+																onChange={(e) => setStyles((prev) => ({
+																	...prev,
+																	[key]: e.target.value,
+																}))}
 															/>
 														) : (
 															<CustomColorPicker
 																name={key}
 																value={styles[key] as string}
-																onChange={(color) =>
-																	setStyles((prev) => ({
-																		...prev,
-																		[key]: color,
-																	}))
-																}
+																onChange={(color) => setStyles((prev) => ({
+																	...prev,
+																	[key]: color,
+																}))}
 															/>
 														)}
 													</td>
@@ -310,25 +325,26 @@ function CustomColorPicker({ name, value, onChange }: ColorPickerProps) {
 			<div className="group cursor-pointer" onClick={() => setVisible(true)}>
 				<input
 					hidden
-					className=""
-					type="color"
 					id={name}
 					name={name}
-					value={value}
 					onChange={() => { }}
+					// type="color"
+					type="text"
+					value={value}
 				/>
 				<div className="h-12 w-24 block border-2 border-slate-600" style={{ background: value }} />
 				<ColorPicker
 					className={classNames(
-						"z-10 absolute shadow-2xl shadow-slate-600 border-slate-600 border-4 rounded-xl",
+						"z-10 absolute shadow-2xl shadow-slate-700 outline-slate-600 outline-4 rounded-xl -translate-y-1/2 -translate-x-1/2",
 						{
 							"block": visible,
 							"hidden": !visible,
 						},
 					)}
-					value={value}
-					onChange={onChange}
 					hidePresets
+					onChange={onChange}
+					showHexAlpha
+					value={value}
 				/>
 			</div>
 		</OutsideClickHandler>

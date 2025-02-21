@@ -61,3 +61,6 @@ export const globalCode = `/**
 **/
 useScrollbar({ styles, onScrollToEnd }, true);
 `;
+
+export const importUnpkgCoreCode = `import Scrollbar from 'https://unpkg.com/thavixt-scrollbar-core/dist/index.js';
+// see usage examples below`;
