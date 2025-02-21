@@ -32,6 +32,8 @@ button {
 	@apply rounded-sm px-2 py-1 cursor-pointer;
 	@apply hover:bg-slate-400 dark:hover:bg-slate-700;
 	@apply border-2 border-transparent hover:border-slate-500;
+	/* animate scale on click */
+	@apply transition-all active:transform-[scale(0.9)];
 }
 button > code {
 	@apply bg-inherit;
