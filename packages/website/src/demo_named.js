@@ -4,7 +4,7 @@ class ImportError extends Error { }
 
 (async () => {
   try {
-    const {Scrollbar: ScrollbarExport} = await import(modulePath);
+    const {Scrollbar: ScrollbarExport} = await import(/* @vite-ignore */modulePath);
     if (typeof ScrollbarExport === 'function') {
       console.log('✅ Importing default module from unpkg.com works')
     } else {
