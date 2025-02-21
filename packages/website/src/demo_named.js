@@ -6,11 +6,11 @@ class ImportError extends Error { }
   try {
     const {Scrollbar: ScrollbarExport} = await import(/* @vite-ignore */modulePath);
     if (typeof ScrollbarExport === 'function') {
-      console.log('✅ Importing default module from unpkg.com works')
+      console.log('✅ Importing named export from module from unpkg.com works')
     } else {
       throw new ImportError()
     }
   } catch (e) {
-    console.error('❌ Failed to import default module from unpkg.com')
+    console.error('❌ Failed to import named export from module from unpkg.com')
   }
 })();
