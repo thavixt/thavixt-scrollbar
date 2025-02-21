@@ -1,14 +1,18 @@
+import classNames from "classnames";
 import { useCallback, useMemo, useState } from "react";
+import ColorPicker from 'react-best-gradient-color-picker'
+import OutsideClickHandler from 'react-outside-click-handler';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import css from 'react-syntax-highlighter/dist/esm/languages/prism/css';
 import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
 import darkTheme from 'react-syntax-highlighter/dist/esm/styles/prism/material-dark';
 import lightTheme from 'react-syntax-highlighter/dist/esm/styles/prism/material-light';
 import { DEFAULT_CSS_STYLESHEET, DEFAULT_STYLES, useScrollbar, ScrollbarStyles, ScrollDirection } from "thavixt-scrollbar-react";
-import { useColorScheme } from "./useColorScheme";
+
 import { codeCustomCSS, sytaxHighlighterStyle, demoGradientStyles, demoStyles, getText, globalCode, numericScrollbarStyles, styleDescriptions } from "./constants";
 import { CopyContentToClipboardButton } from "./components/CopyContentToClipboardButton";
 import { NPMBadge } from "./components/NPMBadge";
+import { useColorScheme } from "./useColorScheme";
 
 SyntaxHighlighter.registerLanguage('css', css);
 SyntaxHighlighter.registerLanguage('tsx', tsx);
@@ -97,7 +101,7 @@ function MyCompontent() {
 				</div>
 				<div className="text-sm flex flex-col">
 					<p>Notes:</p>
-					<ul className="list-disc list-inside">
+					<ul>
 						<li>
 							<p className="inline">all packages include <code>.d.ts</code> files for seamless usage with TypeScript.</p>
 						</li>
@@ -105,23 +109,25 @@ function MyCompontent() {
 				</div>
 			</div>
 
-			<div className="flex flex-col gap-8">
-				<b>Features:</b>
-				<ul className="list-disc list-inside">
+			<div className="flex flex-col gap-2">
+				<h2>Features:</h2>
+				<ul className="space-y-2">
 					<li>
-						Callbacks:
-						<div className="flex flex-col gap-2 pl-4">
-							<div>
+						<p className="inline">Callbacks:</p>
+						<div className="flex flex-col gap-2 pl-4 pt-2">
+							<div className="flex flex-col items-start">
 								<code>
 									{"onScroll: (details) => void"}
 								</code>
+								<em>Called when the container is scrolled in any direction</em>
 							</div>
 							<div>
-								<p>
+								<div className="flex flex-col items-start">
 									<code>
 										{"onScrollToEnd: (thresholds) => void"}
 									</code>
-								</p>
+								</div>
+								<em>Called when the container is scrolled to any side boundary</em>
 							</div>
 						</div>
 					</li>
@@ -136,13 +142,13 @@ function MyCompontent() {
 								<button type="button" onClick={() => setDemoStyles(demoGradientStyles)}>gradients example</button>
 							</div>
 							<div className="pl-6">
-								<table className="table-fixed w-full">
+								<table className="table-auto w-full">
 									<thead>
 										<tr>
 											<th>key</th>
-											<th>default</th>
-											<th>set demo style</th>
-											<th>demo style value</th>
+											{/* <th>default</th> */}
+											<th>current value <em>- click to copy</em></th>
+											<th>set value</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -155,48 +161,43 @@ function MyCompontent() {
 															<code>{key}</code>
 														</label>
 													</td>
-													<td>
+													{/* <td>
 														<code>{DEFAULT_STYLES[key]}</code>
-													</td>
-													<td>
-														<div className="inline-flex items-center justify-center gap-2">
-															{numericScrollbarStyles.includes(key) ? (
-																<input
-																	type="number"
-																	min="0"
-																	max="100"
-																	id={key}
-																	name={key}
-																	value={styles[key]}
-																	onChange={(e) =>
-																		setStyles((prev) => ({
-																			...prev,
-																			[key]: e.target
-																				.value,
-																		}))
-																	}
-																/>
-															) : (
-																<input
-																	type="color"
-																	id={key}
-																	name={key}
-																	value={styles[key]}
-																	onChange={(e) =>
-																		setStyles((prev) => ({
-																			...prev,
-																			[key]: e.target
-																				.value,
-																		}))
-																	}
-																/>
-															)}
-														</div>
-													</td>
+													</td> */}
 													<td>
 														<CopyContentToClipboardButton>
 															<code>{styles[key]}</code>
 														</CopyContentToClipboardButton>
+													</td>
+													<td>
+														{numericScrollbarStyles.includes(key) ? (
+															<input
+																type="number"
+																min="0"
+																max="100"
+																id={key}
+																name={key}
+																value={styles[key]}
+																onChange={(e) =>
+																	setStyles((prev) => ({
+																		...prev,
+																		[key]: e.target
+																			.value,
+																	}))
+																}
+															/>
+														) : (
+															<CustomColorPicker
+																name={key}
+																value={styles[key] as string}
+																onChange={(color) =>
+																	setStyles((prev) => ({
+																		...prev,
+																		[key]: color,
+																	}))
+																}
+															/>
+														)}
 													</td>
 												</tr>
 											);
@@ -206,10 +207,13 @@ function MyCompontent() {
 							</div>
 						</div>
 					</li>
+					<small>
+						<p>current theme: <b>{colorScheme}</b></p>
+					</small>
 				</ul>
 			</div>
 
-			<div className="flex flex-col gap-2">
+			<div className="flex flex-col gap-2 justify-center">
 				<b>Demo: (change the styles in the table)</b>
 				<details>
 					<summary>React code example:</summary>
@@ -290,6 +294,45 @@ function MyCompontent() {
 
 		</div>
 	);
+}
+
+interface ColorPickerProps {
+	name: string;
+	value: string;
+	onChange: (color: string) => void;
+}
+
+function CustomColorPicker({ name, value, onChange }: ColorPickerProps) {
+	const [visible, setVisible] = useState(false);
+
+	return (
+		<OutsideClickHandler onOutsideClick={() => setVisible(false)}>
+			<div className="group cursor-pointer" onClick={() => setVisible(true)}>
+				<input
+					hidden
+					className=""
+					type="color"
+					id={name}
+					name={name}
+					value={value}
+					onChange={() => { }}
+				/>
+				<div className="h-12 w-24 block border-2 border-slate-600" style={{ background: value }} />
+				<ColorPicker
+					className={classNames(
+						"z-10 absolute shadow-2xl shadow-slate-600 border-slate-600 border-4 rounded-xl",
+						{
+							"block": visible,
+							"hidden": !visible,
+						},
+					)}
+					value={value}
+					onChange={onChange}
+					hidePresets
+				/>
+			</div>
+		</OutsideClickHandler>
+	)
 }
 
 export default App;

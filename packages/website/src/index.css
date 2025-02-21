@@ -25,6 +25,9 @@ a {
 h1 {
 	@apply text-6xl font-serif;
 }
+h2 {
+	@apply text-4xl font-sans;
+}
 
 button {
 	@apply bg-slate-300 dark:bg-slate-600;
@@ -33,7 +36,7 @@ button {
 	@apply hover:bg-slate-400 dark:hover:bg-slate-700;
 	@apply border-2 border-transparent hover:border-slate-500;
 	/* animate scale on click */
-	@apply transition-all active:transform-[scale(0.9)];
+	@apply transition-all active:transform-[scale(0.95)];
 }
 button > code {
 	@apply bg-inherit;
@@ -53,18 +56,24 @@ summary {
 ul>li>* {
 	@apply min-h-8;
 }
+ul {
+	@apply list-disc list-inside;
+}
 
 input {
 	@apply cursor-pointer;
 }
 input[type="color"] {
-	@apply w-24 h-8 border-0;
+	@apply w-12 h-8 border-0;
 }
 input[type="number"] {
-	@apply h-6;
+	@apply w-12 h-6;
 	@apply bg-slate-300 dark:bg-slate-600;
 	@apply text-slate-800 dark:text-slate-300;
 	@apply rounded-md w-24 text-center pr-1;
+}
+input[type="checkbox"] {
+	@apply size-6;
 }
 
 label {
