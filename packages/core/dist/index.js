@@ -203,3 +203,4 @@ function filterTruthyValues(obj) {
         return acc;
     }, {});
 }
+export default Scrollbar;

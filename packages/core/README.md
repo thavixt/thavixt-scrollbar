@@ -16,6 +16,12 @@ A basic Javascript package to customize scrollbars on your website.
 npm install thavixt-scrollbar-core
 ```
 
+or import the source directly:
+
+```js
+import Scrollbar from 'https://unpkg.com/thavixt-scrollbar-core/dist/index.js';
+```
+
 ## Example
 
 ```ts
@@ -56,16 +62,22 @@ type ThavixtScrollbarOptions = Partial<{
 }>;
 
 interface ScrollbarStyles {
-	// Size in pixels
+	// Border radius
+	borderRadius?: number;
+
+	// Dimensions
 	width?: number;
-	// Size in pixels
 	height?: number;
-	// CSS color
-	trackColor?: string;
-	// CSS color
+
+	// Light theme colors
 	thumbColor?: string;
-	// CSS color
 	thumbHoverColor?: string;
+	trackColor?: string;
+	
+	// Dark theme colors
+	thumbColorDark?: string;
+	thumbHoverColorDark?: string;
+	trackColorDark?: string;
 }
 
 type ScrollDirection = "top" | "bottom" | "left" | "right";

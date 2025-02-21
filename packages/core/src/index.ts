@@ -279,3 +279,5 @@ function filterTruthyValues<T extends Record<string, unknown>>(
 		return acc;
 	}, {} as Partial<T>);
 }
+
+export default Scrollbar;

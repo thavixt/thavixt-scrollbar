@@ -37,3 +37,4 @@ export declare class Scrollbar<T extends HTMLElement = HTMLElement> {
     private onClick;
     private onScroll;
 }
+export default Scrollbar;
