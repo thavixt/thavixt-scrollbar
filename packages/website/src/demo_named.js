@@ -1,9 +1,16 @@
-import {Scrollbar as ScrollbarExport} from 'https://unpkg.com/thavixt-scrollbar-core/dist/index.js';
+const modulePath = 'https://unpkg.com/thavixt-scrollbar-core/dist/index.js'
 
-if (typeof ScrollbarExport === 'function') {
-  // pass
-  console.log('✅ Importing named module from unpkg.com works')
-} else {
-  // fail
-  console.assert(typeof ScrollbarExport === 'function', '❌ Failed to import named module from unpkg.com')
-}
+class ImportError extends Error { }
+
+(async () => {
+  try {
+    const {Scrollbar: ScrollbarExport} = await import(modulePath);
+    if (typeof ScrollbarExport === 'function') {
+      console.log('✅ Importing default module from unpkg.com works')
+    } else {
+      throw new ImportError()
+    }
+  } catch (e) {
+    console.error('❌ Failed to import default module from unpkg.com')
+  }
+})();
