@@ -11,18 +11,13 @@ export function useScrollbar<T extends HTMLElement = HTMLElement>(options?: Scro
 	const scrollbarRef = useRef<Scrollbar<T> | null>(null);
 
 	useEffect(() => {
-		if (options?.body || ref) {
-			ref.current = null;
-		}
-		return;
-	}, [options?.body]);
-
-	useEffect(() => {
-		if (!(ref.current || options?.body)) {
+		if (!ref.current && !options?.body) {
 			return;
 		}
-		const subject = (options?.body ? document.body : ref.current) as T;
+
+		const subject = (options?.body ? bodyRef.current : ref.current) as T;
 		scrollbarRef.current = new Scrollbar<T>(subject, options);
+
 		return () => {
 			if (scrollbarRef.current) {
 				scrollbarRef.current.destroy();
