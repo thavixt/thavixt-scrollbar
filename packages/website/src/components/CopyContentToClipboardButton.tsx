@@ -1,8 +1,12 @@
 import { PropsWithChildren, useCallback, MouseEvent } from "react";
 
-export function CopyContentToClipboardButton({ children, prepend = "" }: PropsWithChildren<{prepend?: string}>) {
+interface CopyContentToClipboardButtonProps {
+	transform: (value: string) => string;
+}
+
+export function CopyContentToClipboardButton({ children, transform }: PropsWithChildren<CopyContentToClipboardButtonProps>) {
 	const onClick = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-		const text = `${prepend}${e.currentTarget.innerText}`;
+		const text = transform(e.currentTarget.innerText);
 		navigator.clipboard.writeText(text);
 		alert(`"${text}" copied to clipboard.`)
 	}, [])

@@ -28,7 +28,7 @@ SyntaxHighlighter.registerLanguage('css', css);
 SyntaxHighlighter.registerLanguage('tsx', tsx);
 
 function App() {
-	const colorScheme = useColorScheme();
+	const { colorScheme, toggleColorScheme } = useColorScheme();
 	const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
 
 	const [placeholderCount, setPlaceholderCount] = useState(10);
@@ -181,11 +181,8 @@ function MyCompontent() {
 															<code>{key}</code>
 														</label>
 													</td>
-													{/* <td>
-														<code>{DEFAULT_STYLES[key]}</code>
-													</td> */}
 													<td>
-														<CopyContentToClipboardButton>
+														<CopyContentToClipboardButton transform={(value) => `${key}: "${value}"`}>
 															<code>{styles[key]}</code>
 														</CopyContentToClipboardButton>
 													</td>
@@ -222,9 +219,11 @@ function MyCompontent() {
 							</div>
 						</div>
 					</li>
-					<small>
-						<p>current theme: <b>{colorScheme}</b></p>
-					</small>
+					<div className="flex items-center justify-center">
+						<button onClick={toggleColorScheme}>
+							change page color scheme to <b>{colorScheme === 'dark' ? 'light' : 'dark'}</b>
+						</button>
+					</div>
 				</ul>
 			</div>
 
@@ -269,8 +268,14 @@ function MyCompontent() {
 			<div className="flex flex-col gap-2 highlight">
 				<b>Apply styles globally</b>
 				<div className="flex gap-2 items-center justify-start">
+					<input
+						type="checkbox"
+						name="body"
+						id="body"
+						onChange={e => setApplyToBody(e.target.checked)}
+						defaultChecked={applyToBody}
+					/>
 					<label htmlFor="body">customize every scrollbar on the page:</label>
-					<input type="checkbox" name="body" id="body" onChange={e => setApplyToBody(e.target.checked)} defaultChecked={applyToBody} />
 				</div>
 				<details>
 					<summary>React code example:</summary>

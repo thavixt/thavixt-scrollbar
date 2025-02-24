@@ -20,7 +20,7 @@ export const demoStyles: ScrollbarStyles = {
 	thumbColorDark: '#30d94c',
 	thumbHoverColor: '#f033d7',
 	thumbHoverColorDark: '#eb6060',
-	trackColor: '#434242',
+	trackColor: '#aabbcc',
 	trackColorDark: '#ddd4d4',
 }
 
@@ -57,7 +57,7 @@ export const globalCode = `/**
 *
 * When doing this, the 'useScrollbar' hook will *not* have a return value.
 * Since the styling is done with CSS, all elements created after the fact
-* *will* have the scrollbar styles applied.
+* will have the scrollbar styles applied.
 **/
 useScrollbar({ styles, onScrollToEnd }, true);
 `;

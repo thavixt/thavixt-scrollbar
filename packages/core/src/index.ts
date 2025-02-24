@@ -33,12 +33,15 @@ export type ScrollbarStyles = {
 	trackColorDark?: string;
 };
 
-const DEFAULT_THUMB_COLOR = "#aaaabb";
+const DEFAULT_THUMB_COLOR = "#bbbbcc";
 const DEFAULT_THUMB_COLOR_DARK = "#9999aa";
+
 const DEFAULT_THUMB_HOVER_COLOR = "#888899";
 const DEFAULT_THUMB_HOVER_COLOR_DARK = "#ccccdd";
+
 const DEFAULT_TRACK_COLOR = "transparent";
 const DEFAULT_TRACK_COLOR_DARK = "transparent";
+
 const DEFAULT_TRACK_SIZE = 8;
 const DEFAULT_TRACK_BORDER_RADIUS = 8;
 
@@ -87,50 +90,58 @@ ${elementSelector} {
 	--tsb_height: ${height}px;
 	--tsb_borderRadius: ${borderRadius ? `${borderRadius}px` : `initial`};
 }
+/* default/light theme colors */
 ${elementSelector} {
 	--tsb_scrollCornerBackground: ${borderRadius ? `initial` : 'transparent'};
 	--tsb_thumbColor: ${thumbColor};
 	--tsb_thumbHoverColor: ${thumbHoverColor};
 	--tsb_trackColor: ${trackColor};
 }
+/* dark theme colors */
+/* browser media query */
 @media (prefers-color-scheme: dark) {
+	/* data attribute switch, like Tailwind */
+	:root[data-theme="light"] ${elementSelector} {
+		--tsb_scrollCornerBackground: ${borderRadius ? `initial` : 'transparent'};
+		--tsb_thumbColor: ${thumbColor};
+		--tsb_thumbHoverColor: ${thumbHoverColor};
+		--tsb_trackColor: ${trackColor};
+	}
 	${elementSelector} {
 		--tsb_thumbColor: ${thumbColorDark};
 		--tsb_thumbHoverColor: ${thumbHoverColorDark};
 		--tsb_trackColor: ${trackColorDark};
 	}
-}`;
+}
+`;
 
-	const scopedStyles = `/* thavixt-scrollbar stylesheet for element ${elementSelector} */
+	const scopedStyles = `/*
+  thavixt-scrollbar stylesheet for element ${elementSelector}
+*/
 ${variables}
 /* dimensions */
 ${elementSelector}::-webkit-scrollbar {
 	width: var(--tsb_width);
 	height: var(--tsb_height);
 }
-
 /* scrollbar track style */
 ${elementSelector}::-webkit-scrollbar-track {
 	border-radius: var(--tsb_borderRadius);
 	background: var(--tsb_trackColor);
 }
-
 /* scrollbar track corner style */
 ${elementSelector}::-webkit-scrollbar-corner {
 	background: var(--tsb_scrollCornerBackground);
 }
-
 /* scrollbar thumb styles */
 ${elementSelector}::-webkit-scrollbar-thumb {
 	border-radius: var(--tsb_borderRadius);
 	background: var(--tsb_thumbColor);
 }
-
 /* scrollbar hovered thumb styles */
 ${elementSelector}::-webkit-scrollbar-thumb:hover {
 	background: var(--tsb_thumbHoverColor);
 }
-
 /* fallback - Firefox doesn't support '::-webkit-scrollbar' selectors */
 @supports (-moz-appearance:none) {
 	${elementSelector} {
