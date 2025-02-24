@@ -39,7 +39,7 @@
     "prebuild": "vitest --run . && eslint ."
   },
   "dependencies": {
-    "thavixt-scrollbar-core": "^1.6.2"
+    "thavixt-scrollbar-core": "1.6.2"
   },
   "peerDependencies": {
     "react": "^19.0.0",
